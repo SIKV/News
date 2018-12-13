@@ -6,7 +6,7 @@ import 'package:news/home.dart';
 Secret secret;
 
 void main() {
-  SecretLoader(secretPath: "secrets.json").load().then((result) {
+  SecretLoader(secretPath: 'secrets.json').load().then((result) {
     secret = result;
   });
   
@@ -17,7 +17,7 @@ class NewsApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new CupertinoApp(
-      title: "News",
+      title: 'News',
       home: Home(),
     );
   }
@@ -26,10 +26,10 @@ class NewsApp extends StatelessWidget {
 class Secret {
   final String apiKey;
 
-  Secret({this.apiKey = ""});
+  Secret({this.apiKey = ''});
 
   factory Secret.fromJson(Map<String, dynamic> jsonMap) {
-    return new Secret(apiKey: jsonMap["api_key"]);
+    return new Secret(apiKey: jsonMap['api_key']);
   }
 }
 

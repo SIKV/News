@@ -6,7 +6,7 @@ class SettingsTab extends StatelessWidget {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(),
       child: Center(
-        child: Text("Settings"),
+        child: Text('Settings'),
       ),
     );
   }

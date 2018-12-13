@@ -6,7 +6,7 @@ class NewsTab extends StatelessWidget {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(),
       child: Center(
-        child: Text("News"),
+        child: Text('News'),
       ),
     );
   }

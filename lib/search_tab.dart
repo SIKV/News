@@ -6,7 +6,7 @@ class SearchTab extends StatelessWidget {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(),
       child: Center(
-        child: Text("Search"),
+        child: Text('Search'),
       ),
     );
   }
