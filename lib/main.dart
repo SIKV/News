@@ -28,8 +28,8 @@ class Secret {
 
   Secret({this.apiKey = ''});
 
-  factory Secret.fromJson(Map<String, dynamic> jsonMap) {
-    return new Secret(apiKey: jsonMap['api_key']);
+  factory Secret.fromJson(Map<String, dynamic> json) {
+    return new Secret(apiKey: json['api_key']);
   }
 }
 
