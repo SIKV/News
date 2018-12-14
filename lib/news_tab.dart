@@ -9,26 +9,16 @@ class NewsTab extends StatefulWidget {
 }
 
 class _NewsTabState extends State<NewsTab> {
-
-  Future<List<Article>> articles;
-
-  @override
-  void initState() {
-    super.initState();
-
-    articles = Api.internal().fetchArticles();
-  }
-
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(),
       child: Center(
         child: FutureBuilder(
-          future: articles,
+          future: Api.internal().fetchArticles(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return Text('News');
+              return articlesList(snapshot.data);
             } else if (snapshot.hasError) {
               return Text('${snapshot.error}');
             } else {
@@ -37,6 +27,44 @@ class _NewsTabState extends State<NewsTab> {
           },
         ),
       ),
+    );
+  }
+
+  Widget articlesList(List<Article> articles) {
+    return ListView.builder(
+        itemCount: articles.length,
+        itemBuilder: (context, i) => Card(
+            margin: EdgeInsets.all(8.0),
+            elevation: 2.0,
+            child: Stack(
+                children: <Widget>[
+                  Image(
+                    image: NetworkImage(articles[i].urlToImage),
+                    fit: BoxFit.cover,
+                    height: 250.0,
+                  ),
+                  Positioned ( // headline
+                    child: Container(
+                      child: Text (
+                          articles[i].title,
+                          style: TextStyle(
+                              fontSize: 16.0,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w900
+                          )
+                      ),
+                      decoration: BoxDecoration(
+                          color: Colors.black.withAlpha(150)
+                      ),
+                      padding: EdgeInsets.all(8.0),
+                    ),
+                    left: 0.0,
+                    right: 0.0,
+                    bottom: 0.0,
+                  ),
+                ]
+            )
+        )
     );
   }
 }
