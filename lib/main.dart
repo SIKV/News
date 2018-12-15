@@ -1,4 +1,5 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:news/home_screen.dart';
 
 void main() {
@@ -8,9 +9,17 @@ void main() {
 class NewsApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return new CupertinoApp(
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
+      statusBarColor: Colors.white.withAlpha(500),
+    ));
+
+    return new MaterialApp(
       title: 'News',
-      home: HomeScreen()
+      theme: ThemeData(
+        accentColor: Colors.blueAccent
+      ),
+      home: HomeScreen(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }

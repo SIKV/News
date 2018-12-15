@@ -12,9 +12,9 @@ class NewsTab extends StatefulWidget {
 class _NewsTabState extends State<NewsTab> {
   @override
   Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(),
-      child: Center(
+    return Scaffold(
+      backgroundColor: Colors.grey.shade100,
+      body: Center(
         child: FutureBuilder(
           future: Api.internal().fetchArticles(),
           builder: (context, snapshot) {

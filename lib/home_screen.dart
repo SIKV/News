@@ -14,18 +14,20 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return new CupertinoTabScaffold(
       tabBar: CupertinoTabBar(
+        activeColor: Theme.of(context).accentColor,
+        backgroundColor: Colors.grey.shade100,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.list),
-            title: Text('News'),
+            icon: Icon(Icons.home),
+            title: Text(''),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.search),
-            title: Text('Search'),
+            title: Text(''),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),
-            title: Text('Settings'),
+            title: Text(''),
           ),
         ],
       ),
@@ -36,7 +38,6 @@ class _HomeScreenState extends State<HomeScreen> {
               builder: (BuildContext context) {
                 return NewsTab();
               },
-              defaultTitle: 'News',
             );
             break;
           case 1:
@@ -44,7 +45,6 @@ class _HomeScreenState extends State<HomeScreen> {
               builder: (BuildContext context) {
                 return SearchTab();
               },
-              defaultTitle: 'Search',
             );
             break;
           case 2:
@@ -52,7 +52,6 @@ class _HomeScreenState extends State<HomeScreen> {
               builder: (BuildContext context) {
                 return SettingsTab();
               },
-              defaultTitle: 'Settings',
             );
             break;
         }
