@@ -18,16 +18,13 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Colors.grey.shade100,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            title: Text(''),
+            icon: Icon(Icons.home)
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            title: Text(''),
+            icon: Icon(Icons.search)
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            title: Text(''),
+            icon: Icon(Icons.settings)
           ),
         ],
       ),
