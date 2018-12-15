@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class NewsResponse {
   final String status;
   final int totalResults;
@@ -33,12 +35,36 @@ class Article {
   Article({this.source, this.author, this.title, this.description,
     this.url, this.urlToImage, this.publishedAt, this.content});
 
+  String getTitle() {
+    int indexOf = title.lastIndexOf('-');
+
+    if (indexOf != -1) {
+      return title.substring(0, indexOf);
+    } else {
+      return title;
+    }
+  }
+
+  String getPublishedAt() {
+    DateTime dateTime = DateTime.parse(publishedAt);
+    DateTime now = DateTime.now();
+
+    String pattern = '';
+
+    if (dateTime.day == now.day && dateTime.month == now.month && dateTime.year == now.year) {
+      pattern = 'hh:mm a';
+    } else {
+      pattern = 'MM/dd/yy hh:mm a';
+    }
+    return DateFormat(pattern).format(dateTime);
+  }
+
   factory Article.fromJson(Map<String, dynamic> json) {
     return Article(
       source: Source.fromJson(json['source']),
       author: json['author'],
       title: json['title'],
-      description: json['description'],
+      description: json['description'] == null ? "" : json['description'],
       url: json['url'],
       urlToImage: json['urlToImage'] == null ? "" : json['urlToImage'],
       publishedAt: json['publishedAt'],
@@ -56,7 +82,7 @@ class Source {
   factory Source.fromJson(Map<String, dynamic> json) {
     return Source(
       id: json['id'],
-      name: json['name']
+      name: json['name'] == null ? "" : json['name']
     );
   }
 }
