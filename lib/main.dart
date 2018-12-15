@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:news/home.dart';
+import 'package:news/home_screen.dart';
 
 void main() {
   runApp(NewsApp());
@@ -10,7 +10,7 @@ class NewsApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return new CupertinoApp(
       title: 'News',
-      home: Home(),
+      home: HomeScreen()
     );
   }
 }
