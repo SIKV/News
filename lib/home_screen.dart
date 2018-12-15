@@ -15,7 +15,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return new CupertinoTabScaffold(
       tabBar: CupertinoTabBar(
         activeColor: Theme.of(context).accentColor,
-        backgroundColor: Colors.grey.shade100,
+        backgroundColor: Colors.white,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home)
