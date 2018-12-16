@@ -9,9 +9,16 @@ class Api {
   Api.internal();
   factory Api() => _instance;
 
-  Future<List<Article>> fetchArticles() async {
-    final Secret secret = await SecretLoader(secretPath: 'secrets.json').load();
-    final response = await http.get('https://newsapi.org/v2/top-headlines?country=us&apiKey=${secret.apiKey}');
+  Secret _secret;
+
+  Future<List<Article>> fetchArticles(int page) async {
+    if (_secret == null) {
+      _secret = await SecretLoader(secretPath: 'secrets.json').load();
+    }
+
+    final response = await http.get(
+        'https://newsapi.org/v2/top-headlines'
+            '?country=us&page=$page&apiKey=${_secret.apiKey}');
 
     if (response.statusCode == 200) {
       return NewsResponse.fromJson(json.decode(response.body)).articles;
