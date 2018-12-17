@@ -13,7 +13,9 @@ class _NewsTabState extends State<NewsTab> {
   List<Article> _articles = [];
   int _page = 0;
 
-  bool _loading = false;
+  bool _loadingFirst = true;
+  bool _loadingMore = false;
+
   bool _hasMore = true;
 
   @override
@@ -29,6 +31,8 @@ class _NewsTabState extends State<NewsTab> {
 
     if (mounted) {
       setState(() {
+        _loadingFirst = false;
+
         _hasMore = articles.isNotEmpty;
         _articles.addAll(articles);
       });
@@ -36,10 +40,11 @@ class _NewsTabState extends State<NewsTab> {
   }
 
   void _lockedLoadMore() {
-    if (!_loading) {
-      _loading = true;
+    if (!_loadingMore) {
+      _loadingMore = true;
+
       _loadMore().then((_) {
-        _loading = false;
+        _loadingMore = false;
       });
     }
   }
@@ -49,7 +54,7 @@ class _NewsTabState extends State<NewsTab> {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       body: Center(
-        child: _articlesList()
+        child: _loadingFirst ? CircularProgressIndicator() : _articlesList()
       )
     );
   }
