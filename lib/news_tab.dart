@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:news/api.dart';
-import 'package:news/article_screen.dart';
 import 'package:news/models.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class NewsTab extends StatefulWidget {
   @override
@@ -23,6 +23,14 @@ class _NewsTabState extends State<NewsTab> {
     super.initState();
 
     _lockedLoadMore();
+  }
+
+  void _openArticle(Article article) async {
+    if (await canLaunch(article.url)) {
+      await launch(article.url);
+    } else {
+      throw 'Could not launch ${article.url}';
+    }
   }
 
   Future _loadMore() async {
@@ -83,12 +91,7 @@ class _NewsTabState extends State<NewsTab> {
         elevation: 0.5,
         child: InkWell(
             onTap: () {
-              Navigator.push(
-                  context,
-                  CupertinoPageRoute(
-                      builder: (context) => ArticleScreen(article: article)
-                  )
-              );
+              _openArticle(article);
             },
             child: Container(
                 child: _articleWidget(article)
