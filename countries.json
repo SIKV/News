@@ -1,0 +1,30 @@
+[
+  {
+    "name":  "All countries",
+    "value": ""
+  },
+  {
+    "name":  "Australia",
+    "value": "au"
+  },
+  {
+    "name":  "Belgium",
+    "value": "be"
+  },
+  {
+    "name":  "Canada",
+    "value": "ca"
+  },
+  {
+    "name":  "Japan",
+    "value": "jp"
+  },
+  {
+    "name":  "Ukraine",
+    "value": "ua"
+  },
+  {
+    "name":  "United States of America",
+    "value": "us"
+  }
+]

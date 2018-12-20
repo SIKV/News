@@ -41,3 +41,5 @@ flutter:
 
   assets:
     - secrets.json
+    - countries.json
+    - categories.json

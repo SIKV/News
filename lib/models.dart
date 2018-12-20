@@ -86,3 +86,17 @@ class Source {
     );
   }
 }
+
+class NameValue {
+  final String name;
+  final String value;
+
+  NameValue({this.name, this.value});
+
+  factory NameValue.fromJson(Map<String, dynamic> json) {
+    return NameValue(
+        name: json['name'],
+        value: json['value']
+    );
+  }
+}

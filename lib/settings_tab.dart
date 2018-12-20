@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:news/models.dart';
 
 class SettingsTab extends StatefulWidget {
   @override
@@ -9,22 +13,19 @@ class SettingsTab extends StatefulWidget {
 }
 
 class SettingsTabState extends State<SettingsTab> {
-  List _countries = ['All countries'];
-  List _categories = ['All categories'];
+  Map<String, String> _countries = {};
+  Map<String, String> _categories = {};
 
-  List<DropdownMenuItem<String>> _countriesDropdownItems;
-  List<DropdownMenuItem<String>> _categoriesDropdownItems;
+  List<DropdownMenuItem<String>> _countriesDropdownItems = [];
+  List<DropdownMenuItem<String>> _categoriesDropdownItems = [];
 
   String _currentCountry;
   String _currentCategory;
 
   @override
   void initState() {
-    _countriesDropdownItems = _getCountriesDropdownItems();
-    _categoriesDropdownItems = _getCategoriesDropdownItems();
-
-    _currentCountry = _countriesDropdownItems[0].value;
-    _currentCategory = _categoriesDropdownItems[0].value;
+    _initCountries();
+    _initCategories();
 
     super.initState();
   }
@@ -110,29 +111,63 @@ class SettingsTabState extends State<SettingsTab> {
     );
   }
 
-  List<DropdownMenuItem<String>> _getCountriesDropdownItems() {
+  void _initCountries() async {
+    _countriesDropdownItems.add(new DropdownMenuItem(value: '', child: new Text('')));
+    _currentCountry = '';
+
+    await rootBundle.loadStructuredData<List<Map<String, dynamic>>>('countries.json', (jsonStr) async {
+      var jsonDecoded = json.decode(jsonStr);
+
+      _countries = {};
+
+      jsonDecoded.forEach((v) {
+        NameValue nameValue = NameValue.fromJson(v);
+        _countries[nameValue.name] = nameValue.value;
+      });
+    });
+
     List<DropdownMenuItem<String>> items = new List();
 
-    for (String city in _countries) {
-      items.add(new DropdownMenuItem(
-          value: city,
-          child: new Text(city)
-      ));
-    }
+    _countries.forEach((k, v) => items.add(
+        new DropdownMenuItem(
+            value: k,
+            child: new Text(k)
+        ))
+    );
 
-    return items;
+    _countriesDropdownItems = items;
+    _currentCountry = _countriesDropdownItems[0].value;
+
+    setState(() {});
   }
 
-  List<DropdownMenuItem<String>> _getCategoriesDropdownItems() {
+  void _initCategories() async {
+    _categoriesDropdownItems.add(new DropdownMenuItem(value: '', child: new Text('')));
+    _currentCategory = '';
+
+    await rootBundle.loadStructuredData<List<Map<String, dynamic>>>('categories.json', (jsonStr) async {
+      var jsonDecoded = json.decode(jsonStr);
+
+      _categories = {};
+
+      jsonDecoded.forEach((v) {
+        NameValue nameValue = NameValue.fromJson(v);
+        _categories[nameValue.name] = nameValue.value;
+      });
+    });
+
     List<DropdownMenuItem<String>> items = new List();
 
-    for (String city in _categories) {
-      items.add(new DropdownMenuItem(
-          value: city,
-          child: new Text(city)
-      ));
-    }
+    _categories.forEach((k, v) => items.add(
+        new DropdownMenuItem(
+            value: k,
+            child: new Text(k)
+        ))
+    );
 
-    return items;
+    _categoriesDropdownItems = items;
+    _currentCategory = _categoriesDropdownItems[0].value;
+
+    setState(() {});
   }
 }
