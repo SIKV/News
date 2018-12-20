@@ -10,13 +10,13 @@ class NewsApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
-      statusBarColor: Colors.white.withAlpha(500),
+      statusBarColor: Colors.grey.shade100,
     ));
 
     return new MaterialApp(
       title: 'News',
       theme: ThemeData(
-        accentColor: Colors.lightBlue
+        accentColor: Colors.black
       ),
       home: HomeScreen(),
       debugShowCheckedModeBanner: false,

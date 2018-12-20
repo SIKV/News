@@ -18,13 +18,13 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Colors.white,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.home)
+            icon: Icon(CupertinoIcons.collections)
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.search)
+            icon: Icon(CupertinoIcons.search)
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings)
+            icon: Icon(CupertinoIcons.gear)
           ),
         ],
       ),
