@@ -10,11 +10,14 @@ class SearchTab extends StatefulWidget {
 
 class SearchTabState extends State<SearchTab> {
   final _searchTextFieldController = TextEditingController();
+
   bool _showClearIcon = false;
+  bool _showSearchHistory = true;
 
   void _onSearchTextChanged(String text) {
     setState(() {
       _showClearIcon = text.isNotEmpty;
+      _showSearchHistory = text.isEmpty;
     });
   }
 
@@ -57,8 +60,59 @@ class SearchTabState extends State<SearchTab> {
             onChanged: _onSearchTextChanged
           )
       ),
-      body: Center(
-        child: Text('Search'),
+      body: Stack(
+        children: <Widget>[
+          _showSearchHistory ? Padding(
+            padding: const EdgeInsets.only(top: 24, left: 24, right: 24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  'Search History',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w800
+                  ),
+                ),
+                Container(
+                  height: 8,
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: 5,
+                    itemBuilder: (context, i) {
+                      return _searchHistoryItemWidget();
+                    },
+                  ),
+                )
+              ],
+            ),
+          ) : Container()
+        ],
+      ),
+    );
+  }
+
+  Widget _searchHistoryItemWidget() {
+    return InkWell(
+      onTap: () { },
+      child: Container(
+        height: 48,
+        decoration: BoxDecoration(
+          border: Border(
+            bottom: BorderSide(
+              color: Colors.grey.shade200,
+            )
+          )
+        ),
+        child: Padding(
+          padding: const EdgeInsets.only(left: 16, right: 16),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Text('Text')
+          ),
+        )
       ),
     );
   }
