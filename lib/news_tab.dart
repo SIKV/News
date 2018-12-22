@@ -85,11 +85,12 @@ class _NewsTabState extends State<NewsTab> {
   Widget _articleCard(Article article) {
     return Card(
         shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16.0)
+            borderRadius: BorderRadius.circular(16)
         ),
-        margin: EdgeInsets.all(8.0),
+        margin: EdgeInsets.all(8),
         elevation: 0.5,
         child: InkWell(
+            borderRadius: BorderRadius.circular(16),
             onTap: () {
               _openArticle(article);
             },
@@ -107,44 +108,44 @@ class _NewsTabState extends State<NewsTab> {
       children: <Widget>[
         ClipRRect(
           borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(16.0),
-              topRight: Radius.circular(16.0)
+              topLeft: Radius.circular(16),
+              topRight: Radius.circular(16)
           ),
           child: Image(
             image: NetworkImage(article.urlToImage),
             fit: BoxFit.cover,
-            height: 175.0,
+            height: 175,
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(left: 16.0, top: 16.0, right: 16.0),
+          padding: EdgeInsets.only(left: 16, top: 16, right: 16),
           child: Text(
             article.getTitle(),
             style: TextStyle(
-                fontSize: 18.0,
+                fontSize: 18,
                 fontWeight: FontWeight.w600
             ),
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(left: 16.0, top: 8.0, right: 16.0),
+          padding: EdgeInsets.only(left: 16, top: 8, right: 16),
           child: Text(
             article.description,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
               color: Colors.grey,
-              fontSize: 14.0,
+              fontSize: 14,
               fontWeight: FontWeight.w300,
             ),
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(left: 16.0, top: 16.0, right: 16.0, bottom: 16.0),
+          padding: EdgeInsets.only(left: 16, top: 16, right: 16, bottom: 16),
           child: Text(
             '${article.source.name} • ${article.getPublishedAt()}',
             style: TextStyle(
-              fontSize: 12.0,
+              fontSize: 12,
               fontWeight: FontWeight.w500,
             ),
           ),
