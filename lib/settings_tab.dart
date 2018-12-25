@@ -95,6 +95,32 @@ class SettingsTabState extends State<SettingsTab> {
                       },
                     ),
                   ),
+                  Container(
+                    height: 24,
+                  ),
+                  Text(
+                    'Search History',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w800
+                    ),
+                  ),
+                  Container(
+                    height: 8,
+                  ),
+                  FlatButton(
+                    child: Text(
+                      'Clear Search History',
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        fontSize: 15
+                      ),
+                    ),
+                    onPressed: () { },
+                    textColor: Colors.lightBlue,
+                    color: Colors.grey.shade50,
+                  )
                 ],
               ),
               Align(
