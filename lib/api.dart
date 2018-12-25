@@ -26,6 +26,24 @@ class Api {
       throw Exception('Failed');
     }
   }
+
+  Future<List<Article>> searchArticles(String query, int page) async {
+    if (_secret == null) {
+      _secret = await SecretLoader(secretPath: 'secrets.json').load();
+    }
+
+    final response = await http.get(
+        'https://newsapi.org/v2/everything'
+            '?q=$query'
+            '&page=$page'
+            '&apiKey=${_secret.apiKey}');
+
+    if (response.statusCode == 200) {
+      return NewsResponse.fromJson(json.decode(response.body)).articles;
+    } else {
+      throw Exception('Failed');
+    }
+  }
 }
 
 class Secret {
