@@ -17,13 +17,22 @@ class SearchTabState extends State<SearchTab> {
   void _onSearchTextChanged(String text) {
     setState(() {
       _showClearIcon = text.isNotEmpty;
-      _showSearchHistory = text.isEmpty;
+    });
+  }
+
+  void _onSearchSubmitted(String text) {
+    setState(() {
+      _showSearchHistory = false;
     });
   }
 
   void _onClearButtonPressed() {
     _searchTextFieldController.clear();
-    _onSearchTextChanged('');
+
+    setState(() {
+      _showClearIcon = false;
+      _showSearchHistory = true;
+    });
   }
 
   @override
@@ -49,6 +58,7 @@ class SearchTabState extends State<SearchTab> {
           ) : Container(width: 0),
           middle: TextField(
             controller: _searchTextFieldController,
+            textInputAction: TextInputAction.search,
             style: TextStyle(
               color: Colors.black,
               fontSize: 18,
@@ -57,6 +67,7 @@ class SearchTabState extends State<SearchTab> {
                 border: InputBorder.none,
                 hintText: 'Search'
             ),
+            onSubmitted: _onSearchSubmitted,
             onChanged: _onSearchTextChanged
           )
       ),
