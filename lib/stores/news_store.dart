@@ -17,6 +17,8 @@ class NewsStore extends Store {
 
   NewsStore() {
     triggerOnAction(loadNewsAction, (_) async {
+      _articles.clear();
+
       _page = 1;
       await _loadNews();
     });
