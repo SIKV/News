@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:news/models.dart';
+import 'package:news/models/models.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsTab extends StatefulWidget {

@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:news/api.dart';
-import 'package:news/models.dart';
+import 'package:flutter_flux/flutter_flux.dart';
+import 'package:news/actions/actions.dart';
+import 'package:news/models/models.dart';
+import 'package:news/stores/news_store.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class NewsTab extends StatefulWidget {
@@ -9,20 +11,16 @@ class NewsTab extends StatefulWidget {
   _NewsTabState createState() => _NewsTabState();
 }
 
-class _NewsTabState extends State<NewsTab> {
-  List<Article> _articles = [];
-  int _page = 0;
-
-  bool _loadingFirst = true;
-  bool _loadingMore = false;
-
-  bool _hasMore = true;
+class _NewsTabState extends State<NewsTab> with StoreWatcherMixin<NewsTab> {
+  NewsStore newsStore;
 
   @override
   void initState() {
     super.initState();
 
-    _lockedLoadMore();
+    newsStore = listenToStore(newsStoreToken);
+
+    loadNewsAction.call();
   }
 
   void _openArticle(Article article) async {
@@ -33,36 +31,12 @@ class _NewsTabState extends State<NewsTab> {
     }
   }
 
-  Future _loadMore() async {
-    _page++;
-    List<Article> articles = await Api.internal().fetchArticles(_page);
-
-    if (mounted) {
-      setState(() {
-        _loadingFirst = false;
-
-        _hasMore = articles.isNotEmpty;
-        _articles.addAll(articles);
-      });
-    }
-  }
-
-  void _lockedLoadMore() {
-    if (!_loadingMore) {
-      _loadingMore = true;
-
-      _loadMore().then((_) {
-        _loadingMore = false;
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       body: Center(
-        child: _loadingFirst ? CircularProgressIndicator() : _articlesList()
+        child: newsStore.loadingFirst ? CircularProgressIndicator() : _articlesList()
       )
     );
   }
@@ -71,12 +45,12 @@ class _NewsTabState extends State<NewsTab> {
     return Theme(
       data: Theme.of(context).copyWith(accentColor: Colors.white),
       child: ListView.builder(
-        itemCount: _articles.length,
+        itemCount: newsStore.articles.length,
         itemBuilder: (context, i) {
-          if (_hasMore && i == _articles.length - 1) {
-            _lockedLoadMore();
+          if (newsStore.hasMore && i == newsStore.articles.length - 1) {
+            loadMoreNewsAction.call();
           }
-          return _articleCard(_articles[i]);
+          return _articleCard(newsStore.articles[i]);
         }
       )
     );

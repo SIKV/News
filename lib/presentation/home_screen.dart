@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:news/news_tab.dart';
-import 'package:news/search_tab.dart';
-import 'package:news/settings_tab.dart';
+import 'package:news/presentation/news_tab.dart';
+import 'package:news/presentation/search_tab.dart';
+import 'package:news/presentation/settings_tab.dart';
 
 class HomeScreen extends StatefulWidget {
   @override

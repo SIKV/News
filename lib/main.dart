@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:news/home_screen.dart';
+import 'package:news/presentation/home_screen.dart';
 
 void main() {
   runApp(NewsApp());

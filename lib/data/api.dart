@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
-import 'package:news/models.dart';
+import 'package:news/models/models.dart';
 
 class Api {
   static Api _instance = new Api.internal();
