@@ -1,5 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_flux/flutter_flux.dart';
+import 'package:news/actions/actions.dart';
+import 'package:news/models/models.dart';
+import 'package:news/presentation/article_card.dart';
+import 'package:news/stores/search_store.dart';
 
 class SearchTab extends StatefulWidget {
   @override
@@ -8,7 +13,9 @@ class SearchTab extends StatefulWidget {
   }
 }
 
-class SearchTabState extends State<SearchTab> {
+class SearchTabState extends State<SearchTab> with StoreWatcherMixin<SearchTab> {
+  SearchStore searchStore;
+
   final _searchTextFieldController = TextEditingController();
 
   bool _showClearIcon = false;
@@ -21,6 +28,8 @@ class SearchTabState extends State<SearchTab> {
   }
 
   void _onSearchSubmitted(String text) {
+    searchNewsAction.call(text);
+
     setState(() {
       _showSearchHistory = false;
     });
@@ -36,8 +45,16 @@ class SearchTabState extends State<SearchTab> {
   }
 
   @override
+  void initState() {
+    super.initState();
+
+    searchStore = listenToStore(searchStoreToken);
+  }
+
+  @override
   void dispose() {
     _searchTextFieldController.dispose();
+
     super.dispose();
   }
 
@@ -73,33 +90,53 @@ class SearchTabState extends State<SearchTab> {
       ),
       body: Stack(
         children: <Widget>[
-          _showSearchHistory ? Padding(
-            padding: const EdgeInsets.only(top: 24, left: 24, right: 24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  'Search History',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w800
-                  ),
-                ),
-                Container(
-                  height: 8,
-                ),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: 5,
-                    itemBuilder: (context, i) {
-                      return _searchHistoryItemWidget();
-                    },
-                  ),
-                )
-              ],
+          _showSearchHistory ? _searchHistoryList() : _searchWidget()
+        ],
+      ),
+    );
+  }
+
+  Widget _searchWidget() {
+    return Theme(
+        data: Theme.of(context).copyWith(accentColor: Colors.white),
+        child: ListView.builder(
+            itemCount: searchStore.articles.length,
+            itemBuilder: (context, i) {
+              Article article = searchStore.articles[i];
+              return ArticleCard(
+                article: article,
+                onPressed: () { },
+              );
+            }
+        )
+    );
+  }
+
+  Widget _searchHistoryList() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 24, left: 24, right: 24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            'Search History',
+            style: TextStyle(
+                color: Colors.black,
+                fontSize: 16,
+                fontWeight: FontWeight.w800
             ),
-          ) : Container()
+          ),
+          Container(
+            height: 8,
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: 5,
+              itemBuilder: (context, i) {
+                return _searchHistoryItemWidget();
+              },
+            ),
+          )
         ],
       ),
     );
