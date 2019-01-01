@@ -4,7 +4,8 @@ import 'package:flutter_flux/flutter_flux.dart';
 import 'package:news/actions/actions.dart';
 import 'package:news/models/models.dart';
 import 'package:news/presentation/article_card.dart';
-import 'package:news/stores/search_store.dart';
+import 'package:news/stores/news_store.dart';
+import 'package:news/stores/search_history_store.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SearchTab extends StatefulWidget {
@@ -15,7 +16,8 @@ class SearchTab extends StatefulWidget {
 }
 
 class SearchTabState extends State<SearchTab> with StoreWatcherMixin<SearchTab> {
-  SearchStore searchStore;
+  NewsStore newsStore;
+  SearchHistoryStore searchHistoryStore;
 
   final _searchTextFieldController = TextEditingController();
 
@@ -65,7 +67,8 @@ class SearchTabState extends State<SearchTab> with StoreWatcherMixin<SearchTab> 
   void initState() {
     super.initState();
 
-    searchStore = listenToStore(searchStoreToken);
+    newsStore = listenToStore(newsStoreToken);
+    searchHistoryStore = listenToStore(searchHistoryStoreToken);
 
     loadSearchHistoryAction.call();
   }
@@ -117,8 +120,8 @@ class SearchTabState extends State<SearchTab> with StoreWatcherMixin<SearchTab> 
 
   Widget _searchWidget() {
     return Center(
-      child: searchStore.loadingFirst ? CircularProgressIndicator()
-          : searchStore.articles.isEmpty ? _nothingFoundWidget() : _searchResultsList(),
+      child: newsStore.searchLoadingFirst ? CircularProgressIndicator()
+          : newsStore.searchResultArticles.isEmpty ? _nothingFoundWidget() : _searchResultsList(),
     );
   }
 
@@ -136,13 +139,13 @@ class SearchTabState extends State<SearchTab> with StoreWatcherMixin<SearchTab> 
     return Theme(
         data: Theme.of(context).copyWith(accentColor: Colors.white),
         child: ListView.builder(
-            itemCount: searchStore.articles.length,
+            itemCount: newsStore.searchResultArticles.length,
             itemBuilder: (context, i) {
-              if (searchStore.hasMore && i == searchStore.articles.length - 1) {
+              if (newsStore.searchResultHasMore && i == newsStore.searchResultArticles.length - 1) {
                 searchMoreNewsAction.call();
               }
 
-              Article article = searchStore.articles[i];
+              Article article = newsStore.searchResultArticles[i];
 
               return ArticleCard(
                 article: article,
@@ -174,9 +177,9 @@ class SearchTabState extends State<SearchTab> with StoreWatcherMixin<SearchTab> 
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: searchStore.searchHistory.length,
+              itemCount: searchHistoryStore.searchHistory.length,
               itemBuilder: (context, i) {
-                return _searchHistoryItemWidget(searchStore.searchHistory[i]);
+                return _searchHistoryItemWidget(searchHistoryStore.searchHistory[i]);
               },
             ),
           )
