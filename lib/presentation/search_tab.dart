@@ -30,6 +30,7 @@ class SearchTabState extends State<SearchTab> with StoreWatcherMixin<SearchTab> 
 
   void _onSearchSubmitted(String text) {
     searchNewsAction.call(text);
+    addSearchValueAction.call(text);
 
     setState(() {
       _showSearchHistory = false;
@@ -45,6 +46,13 @@ class SearchTabState extends State<SearchTab> with StoreWatcherMixin<SearchTab> 
     });
   }
 
+  void _onSearchValuePressed(String value) {
+    _searchTextFieldController.text = value;
+
+    _onSearchTextChanged(value);
+    _onSearchSubmitted(value);
+  }
+
   void _openArticle(Article article) async {
     if (await canLaunch(article.url)) {
       await launch(article.url);
@@ -58,6 +66,8 @@ class SearchTabState extends State<SearchTab> with StoreWatcherMixin<SearchTab> 
     super.initState();
 
     searchStore = listenToStore(searchStoreToken);
+
+    loadSearchHistoryAction.call();
   }
 
   @override
@@ -164,9 +174,9 @@ class SearchTabState extends State<SearchTab> with StoreWatcherMixin<SearchTab> 
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: 5,
+              itemCount: searchStore.searchHistory.length,
               itemBuilder: (context, i) {
-                return _searchHistoryItemWidget();
+                return _searchHistoryItemWidget(searchStore.searchHistory[i]);
               },
             ),
           )
@@ -175,9 +185,11 @@ class SearchTabState extends State<SearchTab> with StoreWatcherMixin<SearchTab> 
     );
   }
 
-  Widget _searchHistoryItemWidget() {
+  Widget _searchHistoryItemWidget(String value) {
     return InkWell(
-      onTap: () { },
+      onTap: () {
+        _onSearchValuePressed(value);
+      },
       child: Container(
         height: 48,
         decoration: BoxDecoration(
@@ -191,7 +203,7 @@ class SearchTabState extends State<SearchTab> with StoreWatcherMixin<SearchTab> 
           padding: const EdgeInsets.only(left: 16, right: 16),
           child: Align(
             alignment: Alignment.centerLeft,
-            child: Text('Text')
+            child: Text(value)
           ),
         )
       ),

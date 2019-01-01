@@ -24,4 +24,14 @@ class Preferences {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('category') ?? '';
   }
+
+  void saveSearchHistory(List<String> searchHistoryList) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setStringList('search_history', searchHistoryList);
+  }
+
+  Future<List<String>> readSearchHistory() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getStringList('search_history') ?? [];
+  }
 }

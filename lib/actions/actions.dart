@@ -5,3 +5,6 @@ final Action loadMoreNewsAction = Action();
 
 final Action<String> searchNewsAction = Action();
 final Action searchMoreNewsAction = Action();
+
+final Action loadSearchHistoryAction = Action();
+final Action<String> addSearchValueAction = Action();

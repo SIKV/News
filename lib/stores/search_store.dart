@@ -1,6 +1,7 @@
 import 'package:flutter_flux/flutter_flux.dart';
 import 'package:news/actions/actions.dart';
 import 'package:news/data/api.dart';
+import 'package:news/data/preferences.dart';
 import 'package:news/models/models.dart';
 
 final StoreToken searchStoreToken = StoreToken(SearchStore());
@@ -10,12 +11,14 @@ class SearchStore extends Store {
   int _page;
   bool _hasMore = true;
   bool _loadingFirst = true;
-
   String _query;
 
   List<Article> get articles => List<Article>.unmodifiable(_articles);
   bool get hasMore => _hasMore;
   bool get loadingFirst => _loadingFirst;
+
+  Set<String> _searchHistory = Set();
+  List<String> get searchHistory => List<String>.unmodifiable(_searchHistory.toList());
 
   SearchStore() {
     triggerOnAction(searchNewsAction, (query) async {
@@ -30,6 +33,16 @@ class SearchStore extends Store {
     triggerOnAction(searchMoreNewsAction, (_) async {
       _page++;
       await _searchNews(_query);
+    });
+
+    triggerOnAction(loadSearchHistoryAction, (_) async {
+      List<String> searchHistoryList = await Preferences.internal().readSearchHistory();
+      _searchHistory = searchHistoryList.toSet();
+    });
+
+    triggerOnAction(addSearchValueAction, (value) async {
+      _searchHistory.add(value);
+      Preferences.internal().saveSearchHistory(searchHistory);
     });
   }
 
