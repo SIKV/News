@@ -3,8 +3,11 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_flux/flutter_flux.dart';
+import 'package:news/actions/actions.dart';
 import 'package:news/data/preferences.dart';
 import 'package:news/models/models.dart';
+import 'package:news/stores/search_history_store.dart';
 
 class SettingsTab extends StatefulWidget {
   @override
@@ -13,7 +16,9 @@ class SettingsTab extends StatefulWidget {
   }
 }
 
-class SettingsTabState extends State<SettingsTab> {
+class SettingsTabState extends State<SettingsTab> with StoreWatcherMixin<SettingsTab> {
+  SearchHistoryStore searchHistoryStore;
+
   Map<String, String> _countries = {};
   Map<String, String> _categories = {};
 
@@ -25,6 +30,8 @@ class SettingsTabState extends State<SettingsTab> {
 
   @override
   void initState() {
+    searchHistoryStore = listenToStore(searchHistoryStoreToken);
+
     _initCountries();
     _initCategories();
 
@@ -109,18 +116,34 @@ class SettingsTabState extends State<SettingsTab> {
                   Container(
                     height: 8,
                   ),
-                  FlatButton(
-                    child: Text(
-                      'Clear Search History',
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                        fontSize: 15
+                  Builder(
+                    builder: (context) => FlatButton(
+                      child: Text(
+                        'Clear Search History',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            fontSize: 15
+                        ),
                       ),
+                      onPressed: () {
+                        clearSearchHistoryAction.call().then((_) {
+                          Scaffold.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Search History cleared.'),
+                                action: SnackBarAction(
+                                  label: 'Undo',
+                                  onPressed: () {
+                                    undoClearSearchHistoryAction.call();
+                                  },
+                                ),
+                              )
+                          );
+                        });
+                      },
+                      textColor: Theme.of(context).accentColor,
+                      color: Colors.grey.shade50,
                     ),
-                    onPressed: () { },
-                    textColor: Colors.lightBlue,
-                    color: Colors.grey.shade50,
-                  )
+                  ),
                 ],
               ),
               Align(

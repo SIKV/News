@@ -16,7 +16,7 @@ class NewsApp extends StatelessWidget {
     return new MaterialApp(
       title: 'News',
       theme: ThemeData(
-        accentColor: Colors.black
+        accentColor: Colors.lightBlue
       ),
       home: HomeScreen(),
       debugShowCheckedModeBanner: false,

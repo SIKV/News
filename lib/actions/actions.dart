@@ -8,3 +8,5 @@ final Action searchMoreNewsAction = Action();
 
 final Action loadSearchHistoryAction = Action();
 final Action<String> addSearchValueAction = Action();
+final Action clearSearchHistoryAction = Action();
+final Action undoClearSearchHistoryAction = Action();
