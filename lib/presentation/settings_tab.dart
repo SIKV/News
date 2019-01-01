@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:news/data/preferences.dart';
 import 'package:news/models/models.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsTab extends StatefulWidget {
   @override
@@ -63,7 +63,7 @@ class SettingsTabState extends State<SettingsTab> {
                       onChanged: (selectedValue) {
                         setState(() {
                           _currentCountry = selectedValue;
-                          _saveSelectedCountry();
+                          Preferences.internal().saveSelectedCountry(_currentCountry);
                         });
                       },
                     ),
@@ -90,7 +90,7 @@ class SettingsTabState extends State<SettingsTab> {
                       onChanged: (selectedValue) {
                         setState(() {
                           _currentCategory = selectedValue;
-                          _saveSelectedCategory();
+                          Preferences.internal().saveSelectedCategory(_currentCategory);
                         });
                       },
                     ),
@@ -166,7 +166,7 @@ class SettingsTabState extends State<SettingsTab> {
 
     _countriesDropdownItems = items;
 
-    _readSelectedCountry().then((selectedCountry) {
+    Preferences.internal().readSelectedCountry().then((selectedCountry) {
       if (selectedCountry.isNotEmpty) {
         _currentCountry = selectedCountry;
       } else {
@@ -203,7 +203,7 @@ class SettingsTabState extends State<SettingsTab> {
 
     _categoriesDropdownItems = items;
 
-    _readSelectedCategory().then((selectedCategory) {
+    Preferences.internal().readSelectedCategory().then((selectedCategory) {
       if (selectedCategory.isNotEmpty) {
         _currentCategory = selectedCategory;
       } else {
@@ -212,25 +212,5 @@ class SettingsTabState extends State<SettingsTab> {
 
       setState(() {});
     });
-  }
-
-  void _saveSelectedCountry() async {
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setString('country', _currentCountry);
-  }
-
-  Future<String> _readSelectedCountry() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString('country') ?? "";
-  }
-
-  void _saveSelectedCategory() async {
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setString('category', _currentCategory);
-  }
-
-  Future<String> _readSelectedCategory() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString('category') ?? "";
   }
 }
