@@ -8,15 +8,28 @@ final StoreToken searchStoreToken = StoreToken(SearchStore());
 class SearchStore extends Store {
   List<Article> _articles = [];
   int _page;
-  bool _hasMore;
+  bool _hasMore = true;
+  bool _loadingFirst = true;
+
+  String _query;
 
   List<Article> get articles => List<Article>.unmodifiable(_articles);
   bool get hasMore => _hasMore;
+  bool get loadingFirst => _loadingFirst;
 
   SearchStore() {
     triggerOnAction(searchNewsAction, (query) async {
+      _articles.clear();
+      _loadingFirst = true;
+      _query = query;
+
       _page = 1;
       await _searchNews(query);
+    });
+
+    triggerOnAction(searchMoreNewsAction, (_) async {
+      _page++;
+      await _searchNews(_query);
     });
   }
 
@@ -25,5 +38,6 @@ class SearchStore extends Store {
 
     _hasMore = articles.isNotEmpty;
     _articles.addAll(articles);
+    _loadingFirst = false;
   }
 }

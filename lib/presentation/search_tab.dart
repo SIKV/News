@@ -5,6 +5,7 @@ import 'package:news/actions/actions.dart';
 import 'package:news/models/models.dart';
 import 'package:news/presentation/article_card.dart';
 import 'package:news/stores/search_store.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SearchTab extends StatefulWidget {
   @override
@@ -42,6 +43,14 @@ class SearchTabState extends State<SearchTab> with StoreWatcherMixin<SearchTab> 
       _showClearIcon = false;
       _showSearchHistory = true;
     });
+  }
+
+  void _openArticle(Article article) async {
+    if (await canLaunch(article.url)) {
+      await launch(article.url);
+    } else {
+      throw 'Could not launch ${article.url}';
+    }
   }
 
   @override
@@ -97,15 +106,39 @@ class SearchTabState extends State<SearchTab> with StoreWatcherMixin<SearchTab> 
   }
 
   Widget _searchWidget() {
+    return Center(
+      child: searchStore.loadingFirst ? CircularProgressIndicator()
+          : searchStore.articles.isEmpty ? _nothingFoundWidget() : _searchResultsList(),
+    );
+  }
+
+  Widget _nothingFoundWidget() {
+    return Text(
+      'Nothing Found',
+      style: TextStyle(
+        color: Colors.grey.shade400,
+        fontSize: 22
+      ),
+    );
+  }
+
+  Widget _searchResultsList() {
     return Theme(
         data: Theme.of(context).copyWith(accentColor: Colors.white),
         child: ListView.builder(
             itemCount: searchStore.articles.length,
             itemBuilder: (context, i) {
+              if (searchStore.hasMore && i == searchStore.articles.length - 1) {
+                searchMoreNewsAction.call();
+              }
+
               Article article = searchStore.articles[i];
+
               return ArticleCard(
                 article: article,
-                onPressed: () { },
+                onPressed: () {
+                  _openArticle(article);
+                },
               );
             }
         )
