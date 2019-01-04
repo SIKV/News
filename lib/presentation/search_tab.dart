@@ -126,13 +126,7 @@ class SearchTabState extends State<SearchTab> with StoreWatcherMixin<SearchTab> 
   }
 
   Widget _nothingFoundWidget() {
-    return Text(
-      'Nothing Found',
-      style: TextStyle(
-        color: Colors.grey.shade400,
-        fontSize: 22
-      ),
-    );
+    return Text('Nothing Found');
   }
 
   Widget _searchResultsList() {
