@@ -11,19 +11,28 @@ class Api {
 
   Secret _secret;
 
-  Future<List<Article>> fetchArticles(int page) async {
+  Future<NewsResponse> fetchArticles(int page, String country, String category) async {
     if (_secret == null) {
       _secret = await SecretLoader(secretPath: 'secrets.json').load();
     }
 
-    final response = await http.get(
-        'https://newsapi.org/v2/top-headlines'
-            '?country=us&page=$page&apiKey=${_secret.apiKey}');
+    String url = 'https://newsapi.org/v2/top-headlines'
+        '?page=$page'
+        '&apiKey=${_secret.apiKey}';
+
+    if (country != null && country.isNotEmpty) {
+      url = url + '&country=$country';
+    }
+    if (category != null && category.isNotEmpty) {
+      url = url + '&category=$category';
+    }
+
+    final response = await http.get(url);
 
     if (response.statusCode == 200) {
-      return NewsResponse.fromJson(json.decode(response.body)).articles;
+      return NewsResponse.fromJson(json.decode(response.body));
     } else {
-      throw Exception('Failed');
+      return NewsResponse(success: false, error: 'Something went wrong');
     }
   }
 

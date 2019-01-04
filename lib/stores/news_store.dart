@@ -1,6 +1,7 @@
 import 'package:flutter_flux/flutter_flux.dart';
 import 'package:news/actions/actions.dart';
 import 'package:news/data/api.dart';
+import 'package:news/data/preferences.dart';
 import 'package:news/models/models.dart';
 
 final StoreToken newsStoreToken = StoreToken(NewsStore());
@@ -13,6 +14,12 @@ class NewsStore extends Store {
 
   bool _hasMore = true;
   bool get hasMore => _hasMore;
+
+  bool _hasError = true;
+  bool get hasError => _hasError;
+
+  String _error = '';
+  String get error => _error;
 
   bool _loadingFirst = true;
   bool get loadingFirst => _loadingFirst;
@@ -58,11 +65,24 @@ class NewsStore extends Store {
   }
 
   Future _loadNews() async {
-    List<Article> articles = await Api.internal().fetchArticles(_page);
+    _hasError = false;
+    _error = '';
 
-    _hasMore = articles.isNotEmpty;
-    _articles.addAll(articles);
-    _loadingFirst = false;
+    String country = await Preferences.internal().readSelectedCountry();
+    String category = await Preferences.internal().readSelectedCategory();
+
+    NewsResponse newsResponse = await Api.internal().fetchArticles(_page, country, category);
+
+    if (newsResponse.success) {
+      _hasMore = newsResponse.articles.isNotEmpty;
+      _articles.addAll(newsResponse.articles);
+      _loadingFirst = false;
+    } else {
+      _hasError = true;
+      _error = newsResponse.error;
+      _hasMore = false;
+      _loadingFirst = false;
+    }
   }
 
   Future _searchNews(String query) async {

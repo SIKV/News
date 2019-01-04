@@ -43,35 +43,45 @@ class _NewsTabState extends State<NewsTab> with StoreWatcherMixin<NewsTab> {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       body: Center(
-        child: newsStore.loadingFirst ? CircularProgressIndicator() : _articlesList()
+        child: newsStore.loadingFirst ? CircularProgressIndicator() : _articlesWidget()
       )
     );
   }
 
-  Widget _articlesList() {
+  Widget _articlesWidget() {
     return RefreshIndicator(
-      key: _refreshIndicatorKey,
-      onRefresh: _refresh,
-      child: Theme(
-          data: Theme.of(context).copyWith(accentColor: Colors.white),
-          child: ListView.builder(
-              itemCount: newsStore.articles.length,
-              itemBuilder: (context, i) {
-                if (newsStore.hasMore && i == newsStore.articles.length - 1) {
-                  loadMoreNewsAction.call();
-                }
+        key: _refreshIndicatorKey,
+        onRefresh: _refresh,
+        child: newsStore.hasError ? SingleChildScrollView(
+            physics: AlwaysScrollableScrollPhysics(),
+            child: Container(
+                height: MediaQuery.of(context).size.height,
+                child: Center(child: Text(newsStore.error))
+            )
+        ) : _articlesList()
+    );
+  }
 
-                Article article = newsStore.articles[i];
-
-                return ArticleCard(
-                  article: article,
-                  onPressed: () {
-                    _openArticle(article);
-                  },
-                );
+  Widget _articlesList() {
+    return Theme(
+        data: Theme.of(context).copyWith(accentColor: Colors.white),
+        child: ListView.builder(
+            itemCount: newsStore.articles.length,
+            itemBuilder: (context, i) {
+              if (newsStore.hasMore && i == newsStore.articles.length - 1) {
+                loadMoreNewsAction.call();
               }
-          )
-      ),
+
+              Article article = newsStore.articles[i];
+
+              return ArticleCard(
+                article: article,
+                onPressed: () {
+                  _openArticle(article);
+                },
+              );
+            }
+        )
     );
   }
 }

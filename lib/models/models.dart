@@ -2,10 +2,12 @@ import 'package:intl/intl.dart';
 
 class NewsResponse {
   final String status;
+  final bool success;
+  final String error;
   final int totalResults;
   final List<Article> articles;
 
-  NewsResponse({this.status, this.totalResults, this.articles});
+  NewsResponse({this.status, this.success, this.error, this.totalResults, this.articles});
 
   factory NewsResponse.fromJson(Map<String, dynamic> json) {
     List<Article> articles = new List<Article>();
@@ -16,6 +18,8 @@ class NewsResponse {
 
     return NewsResponse(
       status: json['status'],
+      success: true,
+      error: null,
       totalResults: json['totalResults'],
       articles: articles
     );
