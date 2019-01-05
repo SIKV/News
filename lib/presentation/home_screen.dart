@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:news/presentation/news_tab.dart';
+import 'package:news/presentation/saved_tab.dart';
 import 'package:news/presentation/search_tab.dart';
 import 'package:news/presentation/settings_tab.dart';
 
@@ -24,6 +25,9 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: Icon(CupertinoIcons.search)
           ),
           BottomNavigationBarItem(
+              icon: Icon(CupertinoIcons.bookmark)
+          ),
+          BottomNavigationBarItem(
             icon: Icon(CupertinoIcons.gear)
           ),
         ],
@@ -45,6 +49,13 @@ class _HomeScreenState extends State<HomeScreen> {
             );
             break;
           case 2:
+            return CupertinoTabView(
+              builder: (BuildContext context) {
+                return SavedTab();
+              },
+            );
+            break;
+          case 3:
             return CupertinoTabView(
               builder: (BuildContext context) {
                 return SettingsTab();
