@@ -7,12 +7,12 @@ import 'package:news/presentation/article_card.dart';
 import 'package:news/stores/news_store.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class NewsTab extends StatefulWidget {
+class HeadlinesTab extends StatefulWidget {
   @override
-  _NewsTabState createState() => _NewsTabState();
+  _HeadlinesTabState createState() => _HeadlinesTabState();
 }
 
-class _NewsTabState extends State<NewsTab> with StoreWatcherMixin<NewsTab> {
+class _HeadlinesTabState extends State<HeadlinesTab> with StoreWatcherMixin<HeadlinesTab> {
   NewsStore newsStore;
 
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey();
