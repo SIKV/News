@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:news/models/models.dart';
+import 'package:news/utils.dart';
 
 class ArticleCard extends StatelessWidget {
   final Article article;
@@ -69,7 +70,7 @@ class ArticleCard extends StatelessWidget {
         Padding(
           padding: EdgeInsets.only(left: 16, top: 16, right: 16, bottom: 16),
           child: Text(
-            '${article.source.name} • ${article.getPublishedAt()}',
+            '${article.source.name} • ${formatDate(article.publishedAt)}',
             style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w500,

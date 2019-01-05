@@ -3,6 +3,7 @@ import 'package:news/actions/actions.dart';
 import 'package:news/data/api.dart';
 import 'package:news/data/preferences.dart';
 import 'package:news/models/models.dart';
+import 'package:news/utils.dart';
 
 final StoreToken newsStoreToken = StoreToken(NewsStore());
 
@@ -70,6 +71,10 @@ class NewsStore extends Store {
 
     String country = await Preferences.internal().readSelectedCountry();
     String category = await Preferences.internal().readSelectedCategory();
+
+    if (country == null || country.isEmpty) {
+      country = await getCountryCode();
+    }
 
     NewsResponse newsResponse = await Api.internal().fetchArticles(_page, country, category);
 

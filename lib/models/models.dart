@@ -1,5 +1,3 @@
-import 'package:intl/intl.dart';
-
 class NewsResponse {
   final String status;
   final bool success;
@@ -47,20 +45,6 @@ class Article {
     } else {
       return title;
     }
-  }
-
-  String getPublishedAt() {
-    DateTime dateTime = DateTime.parse(publishedAt);
-    DateTime now = DateTime.now();
-
-    String pattern = '';
-
-    if (dateTime.day == now.day && dateTime.month == now.month && dateTime.year == now.year) {
-      pattern = 'hh:mm a';
-    } else {
-      pattern = 'MM/dd/yy hh:mm a';
-    }
-    return DateFormat(pattern).format(dateTime);
   }
 
   factory Article.fromJson(Map<String, dynamic> json) {
