@@ -38,10 +38,23 @@ class ArticleCard extends StatelessWidget {
               topLeft: Radius.circular(16),
               topRight: Radius.circular(16)
           ),
-          child: Image(
+          child: article.hasImage() ? Image(
             image: NetworkImage(article.urlToImage),
             fit: BoxFit.cover,
             height: 175,
+          ) : Container(
+            height: 175,
+            color: Colors.grey.shade300,
+            child: Center(
+              child: Text(
+                'No image',
+                style: TextStyle(
+                  fontSize: 48,
+                  fontWeight: FontWeight.w900,
+                  color: Colors.grey.shade200
+                ),
+              ),
+            ),
           ),
         ),
         Padding(

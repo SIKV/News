@@ -47,6 +47,10 @@ class Article {
     }
   }
 
+  bool hasImage() {
+    return urlToImage != null && urlToImage.isNotEmpty;
+  }
+
   factory Article.fromJson(Map<String, dynamic> json) {
     return Article(
       source: Source.fromJson(json['source']),
