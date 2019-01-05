@@ -14,13 +14,13 @@ String formatDate(String date) {
   DateTime dateTime = DateTime.parse(date);
   DateTime now = DateTime.now();
 
-  String pattern = '';
+  Duration difference = now.difference(dateTime);
 
-  if (dateTime.day == now.day && dateTime.month == now.month && dateTime.year == now.year) {
-    pattern = 'hh:mm a';
+  if (difference.inMinutes < 60) {
+    return '${difference.inMinutes}m ago';
+  } else if (difference.inHours <= 48) {
+    return '${difference.inHours}h ago';
   } else {
-    pattern = 'MM/dd/yy hh:mm a';
+    return DateFormat('MM/dd/yy hh:mm a', 'en_US').format(dateTime);
   }
-
-  return DateFormat(pattern, 'en_US').format(dateTime);
 }
