@@ -1,8 +1,8 @@
 import 'package:flutter_flux/flutter_flux.dart';
 
-final Action<String> setCurrentCategoryAction = Action();
-final Action loadNewsAction = Action();
-final Action loadMoreNewsAction = Action();
+final Action<String> loadNewsAction = Action();
+final Action<String> reloadNewsAction = Action();
+final Action<String> loadMoreNewsAction = Action();
 
 final Action<String> searchNewsAction = Action();
 final Action searchMoreNewsAction = Action();

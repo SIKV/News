@@ -25,8 +25,7 @@ class _NewsTabState extends State<NewsTab> with StoreWatcherMixin<NewsTab> {
   void initState() {
     newsStore = listenToStore(newsStoreToken);
 
-    setCurrentCategoryAction.call(widget.category);
-    loadNewsAction.call();
+    loadNewsAction.call(widget.category);
 
     super.initState();
   }
@@ -40,15 +39,13 @@ class _NewsTabState extends State<NewsTab> with StoreWatcherMixin<NewsTab> {
   }
 
   Future<Null> _refresh() {
-    return loadNewsAction.call().then((_) {});
+    return reloadNewsAction.call(widget.category).then((_) {});
   }
 
   @override
   Widget build(BuildContext context) {
     return Center(
-        child: newsStore.categoryExists
-            ? newsStore.loadingFirst ? CircularProgressIndicator() : _articlesWidget()
-            : CircularProgressIndicator()
+        child: newsStore.getCategory(widget.category).loadingFirst ? CircularProgressIndicator() : _articlesWidget()
     );
   }
 
@@ -56,11 +53,11 @@ class _NewsTabState extends State<NewsTab> with StoreWatcherMixin<NewsTab> {
     return RefreshIndicator(
         key: _refreshIndicatorKey,
         onRefresh: _refresh,
-        child: newsStore.hasError ? SingleChildScrollView(
+        child: newsStore.getCategory(widget.category).hasError ? SingleChildScrollView(
             physics: AlwaysScrollableScrollPhysics(),
             child: Container(
                 height: MediaQuery.of(context).size.height,
-                child: Center(child: Text(newsStore.error))
+                child: Center(child: Text(newsStore.getCategory(widget.category).error))
             )
         ) : _articlesList()
     );
@@ -70,13 +67,14 @@ class _NewsTabState extends State<NewsTab> with StoreWatcherMixin<NewsTab> {
     return Theme(
         data: Theme.of(context).copyWith(accentColor: Colors.white),
         child: ListView.builder(
-            itemCount: newsStore.articles.length,
+            itemCount: newsStore.getCategory(widget.category).articles.length,
             itemBuilder: (context, i) {
-              if (newsStore.hasMore && i == newsStore.articles.length - 1) {
-                loadMoreNewsAction.call();
+              if (newsStore.getCategory(widget.category).hasMore
+                  && i == newsStore.getCategory(widget.category).articles.length - 1) {
+                loadMoreNewsAction.call(widget.category);
               }
 
-              Article article = newsStore.articles[i];
+              Article article = newsStore.getCategory(widget.category).articles[i];
 
               return ArticleCard(
                 article: article,

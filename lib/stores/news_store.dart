@@ -7,34 +7,28 @@ import 'package:news/utils.dart';
 
 final StoreToken newsStoreToken = StoreToken(NewsStore());
 
-class _Category {
+class Category {
   List<Article> _articles = [];
+  List<Article> get articles => List<Article>.unmodifiable(_articles);
+  
   int _page;
 
   bool _hasMore = true;
+  bool get hasMore => _hasMore;
+  
   bool _hasError = true;
+  bool get hasError => _hasError;
 
   String _error = '';
+  String get error => _error;
 
   bool _loadingFirst = true;
+  bool get loadingFirst => _loadingFirst;
 }
 
 class NewsStore extends Store {
-  String _category;
-  bool get categoryExists => _category != null && _category.isNotEmpty;
-
-  Map<String, _Category> _categoriesMap = {};
-  _Category get _currentCategory => _categoriesMap[_category];
-
-  List<Article> get articles => List<Article>.unmodifiable(_currentCategory._articles);
-
-  bool get hasMore => _currentCategory._hasMore;
-  bool get hasError => _currentCategory._hasError;
-
-  String get error => _currentCategory._error;
-
-  bool get loadingFirst => _currentCategory._loadingFirst;
-
+  Map<String, Category> _categoriesMap = {};
+  
   List<Article> _searchResultArticles = [];
   List<Article> get searchResultArticles => List<Article>.unmodifiable(_searchResultArticles);
 
@@ -48,22 +42,22 @@ class NewsStore extends Store {
   bool get searchLoadingFirst => _searchLoadingFirst;
 
   NewsStore() {
-    triggerOnAction(setCurrentCategoryAction, (category) async {
-      _category = category;
-      _checkIfCategoryExists(_category);
+    triggerOnAction(loadNewsAction, (category) async {
+      if (getCategory(category)._articles.isEmpty) {
+        reloadNewsAction.call(category);
+      }
     });
 
-    triggerOnAction(loadNewsAction, (_) async {
-      _currentCategory._articles.clear();
-      _currentCategory._loadingFirst = true;
+    triggerOnAction(reloadNewsAction, (category) async {
+      getCategory(category)._articles.clear();
 
-      _currentCategory._page = 1;
-      await _loadNews(_category);
+      getCategory(category)._page = 1;
+      await _loadNews(category);
     });
     
-    triggerOnAction(loadMoreNewsAction, (_) async {
-      _currentCategory._page++;
-      await _loadNews(_category);
+    triggerOnAction(loadMoreNewsAction, (category) async {
+      getCategory(category)._page++;
+      await _loadNews(category);
     });
 
     triggerOnAction(searchNewsAction, (query) async {
@@ -80,16 +74,17 @@ class NewsStore extends Store {
       await _searchNews(_searchQuery);
     });
   }
-
-  void _checkIfCategoryExists(String category) {
+  
+  Category getCategory(String category) {
     if (!_categoriesMap.containsKey(category)) {
-      _categoriesMap[category] = _Category();
+      _categoriesMap[category] = new Category();
     }
+    return _categoriesMap[category];
   }
 
   Future _loadNews(String category) async {
-    _currentCategory._hasError = false;
-    _currentCategory._error = '';
+    getCategory(category)._hasError = false;
+    getCategory(category)._error = '';
 
     String country = await Preferences.internal().readSelectedCountry();
 
@@ -97,17 +92,17 @@ class NewsStore extends Store {
       country = await getCountryCode();
     }
 
-    NewsResponse newsResponse = await Api.internal().fetchArticles(_currentCategory._page, country, category);
+    NewsResponse newsResponse = await Api.internal().fetchArticles(getCategory(category)._page, country, category);
 
     if (newsResponse.success) {
-      _currentCategory._hasMore = newsResponse.articles.isNotEmpty;
-      _currentCategory._articles.addAll(newsResponse.articles);
-      _currentCategory._loadingFirst = false;
+      getCategory(category)._hasMore = newsResponse.articles.isNotEmpty;
+      getCategory(category)._articles.addAll(newsResponse.articles);
+      getCategory(category)._loadingFirst = false;
     } else {
-      _currentCategory._hasError = true;
-      _currentCategory._error = newsResponse.error;
-      _currentCategory._hasMore = false;
-      _currentCategory._loadingFirst = false;
+      getCategory(category)._hasError = true;
+      getCategory(category)._error = newsResponse.error;
+      getCategory(category)._hasMore = false;
+      getCategory(category)._loadingFirst = false;
     }
   }
 
