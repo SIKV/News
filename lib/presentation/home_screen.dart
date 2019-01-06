@@ -19,16 +19,20 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Colors.white,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.language)
+            icon: Icon(Icons.language, color: Colors.black26),
+            activeIcon: Icon(Icons.language, color: Colors.lightBlue),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.search)
+            icon: Icon(Icons.search, color: Colors.black26),
+            activeIcon: Icon(Icons.search, color: Colors.lightBlue),
           ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.bookmark)
+            icon: Icon(Icons.bookmark_border, color: Colors.black26),
+            activeIcon: Icon(Icons.bookmark_border, color: Colors.lightBlue),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings)
+            icon: Icon(Icons.settings, color: Colors.black26),
+            activeIcon: Icon(Icons.settings, color: Colors.lightBlue),
           ),
         ],
       ),

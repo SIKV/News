@@ -12,8 +12,10 @@ class _SavedTabState extends State<SavedTab> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: CupertinoNavigationBar(
-          middle: Text('Saved'),
+        appBar: AppBar(
+          title: Text('Saved'),
+          centerTitle: true,
+          elevation: 0.5,
         ),
         body: new Container()
     );

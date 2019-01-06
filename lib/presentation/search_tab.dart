@@ -10,12 +10,12 @@ import 'package:url_launcher/url_launcher.dart';
 
 class SearchTab extends StatefulWidget {
   @override
-  SearchTabState createState() {
-    return new SearchTabState();
+  _SearchTabState createState() {
+    return new _SearchTabState();
   }
 }
 
-class SearchTabState extends State<SearchTab> with StoreWatcherMixin<SearchTab> {
+class _SearchTabState extends State<SearchTab> with StoreWatcherMixin<SearchTab> {
   NewsStore newsStore;
   SearchHistoryStore searchHistoryStore;
 
@@ -83,19 +83,22 @@ class SearchTabState extends State<SearchTab> with StoreWatcherMixin<SearchTab> 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CupertinoNavigationBar(
+      appBar: AppBar(
+          elevation: 0.5,
           leading: Icon(
               CupertinoIcons.search,
               size: 28,
               color: Colors.black
           ),
-          trailing: _showClearIcon ? IconButton(
-            icon: Icon(Icons.clear),
-            iconSize: 24,
-            color: Colors.grey,
-            onPressed: _onClearButtonPressed,
-          ) : Container(width: 0),
-          middle: TextField(
+          actions: <Widget>[
+            _showClearIcon ? IconButton(
+              icon: Icon(Icons.clear),
+              iconSize: 24,
+              color: Colors.grey,
+              onPressed: _onClearButtonPressed,
+            ) : Container(width: 0),
+          ],
+          title: TextField(
             controller: _searchTextFieldController,
             textInputAction: TextInputAction.search,
             style: TextStyle(

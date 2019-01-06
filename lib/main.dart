@@ -16,11 +16,11 @@ class NewsApp extends StatelessWidget {
     return new MaterialApp(
       title: 'News',
       theme: ThemeData(
-        accentColor: Colors.black,
+        accentColor: Colors.lightBlue,
         primaryColor: Colors.white,
         tabBarTheme: TabBarTheme(
-          labelColor: Colors.black
-        )
+          labelColor: Colors.black,
+        ),
       ),
       home: HomeScreen(),
       debugShowCheckedModeBanner: false,

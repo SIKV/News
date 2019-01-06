@@ -32,10 +32,6 @@ class Api {
       url = url + '&category=$category';
     }
 
-
-    print('--- URL = $url');
-
-
     final response = await http.get(url);
 
     if (response.statusCode == 200) {

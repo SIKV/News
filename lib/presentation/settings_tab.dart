@@ -7,12 +7,12 @@ import 'package:news/stores/settings_store.dart';
 
 class SettingsTab extends StatefulWidget {
   @override
-  SettingsTabState createState() {
-    return new SettingsTabState();
+  _SettingsTabState createState() {
+    return new _SettingsTabState();
   }
 }
 
-class SettingsTabState extends State<SettingsTab> with StoreWatcherMixin<SettingsTab> {
+class _SettingsTabState extends State<SettingsTab> with StoreWatcherMixin<SettingsTab> {
   SettingsStore settingsStore;
   SearchHistoryStore searchHistoryStore;
 
@@ -29,8 +29,10 @@ class SettingsTabState extends State<SettingsTab> with StoreWatcherMixin<Setting
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: CupertinoNavigationBar(
-          middle: Text('Settings'),
+        appBar: AppBar(
+          title: Text('Settings'),
+          centerTitle: true,
+          elevation: 0.5,
         ),
         body: Padding(
           padding: const EdgeInsets.all(24),
@@ -87,9 +89,9 @@ class SettingsTabState extends State<SettingsTab> with StoreWatcherMixin<Setting
                         clearSearchHistoryAction.call().then((_) {
                           Scaffold.of(context).showSnackBar(
                               SnackBar(
-                                content: Text('Search History cleared.'),
+                                content: Text('Search History cleared'),
                                 action: SnackBarAction(
-                                  label: 'Undo',
+                                  label: 'UNDO',
                                   onPressed: () {
                                     undoClearSearchHistoryAction.call();
                                   },
