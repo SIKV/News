@@ -20,6 +20,11 @@ class Api {
         '?page=$page'
         '&apiKey=${_secret.apiKey}';
 
+    // TODO FIX
+    if (category == 'all') {
+      category = '';
+    }
+
     if (country != null && country.isNotEmpty) {
       url = url + '&country=$country';
     }

@@ -22,7 +22,6 @@ class SettingsTabState extends State<SettingsTab> with StoreWatcherMixin<Setting
     searchHistoryStore = listenToStore(searchHistoryStoreToken);
 
     loadCountriesListAction.call();
-    loadCategoriesListAction.call();
 
     super.initState();
   }
@@ -58,30 +57,6 @@ class SettingsTabState extends State<SettingsTab> with StoreWatcherMixin<Setting
                       items: settingsStore.countriesDropdownItems,
                       onChanged: (value) {
                         setCurrentCountryAction.call(value);
-                      },
-                    ),
-                  ),
-                  Container(
-                    height: 24,
-                  ),
-                  Text(
-                    'Category',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w800
-                    ),
-                  ),
-                  Container(
-                    height: 8,
-                  ),
-                  SizedBox(
-                    width: double.infinity,
-                    child: DropdownButton(
-                      value: settingsStore.currentCategory,
-                      items: settingsStore.categoriesDropdownItems,
-                      onChanged: (value) {
-                        setCurrentCategoryAction.call(value);
                       },
                     ),
                   ),

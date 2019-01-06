@@ -15,16 +15,6 @@ class Preferences {
     return prefs.getString('country') ?? '';
   }
 
-  void saveSelectedCategory(String category) async {
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setString('category', category);
-  }
-
-  Future<String> readSelectedCategory() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString('category') ?? '';
-  }
-
   void saveSearchHistory(List<String> searchHistoryList) async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setStringList('search_history', searchHistoryList);

@@ -7,23 +7,33 @@ import 'package:news/utils.dart';
 
 final StoreToken newsStoreToken = StoreToken(NewsStore());
 
-class NewsStore extends Store {
+class _Category {
   List<Article> _articles = [];
-  List<Article> get articles => List<Article>.unmodifiable(_articles);
-
   int _page;
 
   bool _hasMore = true;
-  bool get hasMore => _hasMore;
-
   bool _hasError = true;
-  bool get hasError => _hasError;
 
   String _error = '';
-  String get error => _error;
 
   bool _loadingFirst = true;
-  bool get loadingFirst => _loadingFirst;
+}
+
+class NewsStore extends Store {
+  String _category;
+  bool get categoryExists => _category != null && _category.isNotEmpty;
+
+  Map<String, _Category> _categoriesMap = {};
+  _Category get _currentCategory => _categoriesMap[_category];
+
+  List<Article> get articles => List<Article>.unmodifiable(_currentCategory._articles);
+
+  bool get hasMore => _currentCategory._hasMore;
+  bool get hasError => _currentCategory._hasError;
+
+  String get error => _currentCategory._error;
+
+  bool get loadingFirst => _currentCategory._loadingFirst;
 
   List<Article> _searchResultArticles = [];
   List<Article> get searchResultArticles => List<Article>.unmodifiable(_searchResultArticles);
@@ -38,16 +48,22 @@ class NewsStore extends Store {
   bool get searchLoadingFirst => _searchLoadingFirst;
 
   NewsStore() {
-    triggerOnAction(loadNewsAction, (_) async {
-      _articles.clear();
+    triggerOnAction(setCurrentCategoryAction, (category) async {
+      _category = category;
+      _checkIfCategoryExists(_category);
+    });
 
-      _page = 1;
-      await _loadNews();
+    triggerOnAction(loadNewsAction, (_) async {
+      _currentCategory._articles.clear();
+      _currentCategory._loadingFirst = true;
+
+      _currentCategory._page = 1;
+      await _loadNews(_category);
     });
     
     triggerOnAction(loadMoreNewsAction, (_) async {
-      _page++;
-      await _loadNews();
+      _currentCategory._page++;
+      await _loadNews(_category);
     });
 
     triggerOnAction(searchNewsAction, (query) async {
@@ -65,28 +81,33 @@ class NewsStore extends Store {
     });
   }
 
-  Future _loadNews() async {
-    _hasError = false;
-    _error = '';
+  void _checkIfCategoryExists(String category) {
+    if (!_categoriesMap.containsKey(category)) {
+      _categoriesMap[category] = _Category();
+    }
+  }
+
+  Future _loadNews(String category) async {
+    _currentCategory._hasError = false;
+    _currentCategory._error = '';
 
     String country = await Preferences.internal().readSelectedCountry();
-    String category = await Preferences.internal().readSelectedCategory();
 
     if (country == null || country.isEmpty) {
       country = await getCountryCode();
     }
 
-    NewsResponse newsResponse = await Api.internal().fetchArticles(_page, country, category);
+    NewsResponse newsResponse = await Api.internal().fetchArticles(_currentCategory._page, country, category);
 
     if (newsResponse.success) {
-      _hasMore = newsResponse.articles.isNotEmpty;
-      _articles.addAll(newsResponse.articles);
-      _loadingFirst = false;
+      _currentCategory._hasMore = newsResponse.articles.isNotEmpty;
+      _currentCategory._articles.addAll(newsResponse.articles);
+      _currentCategory._loadingFirst = false;
     } else {
-      _hasError = true;
-      _error = newsResponse.error;
-      _hasMore = false;
-      _loadingFirst = false;
+      _currentCategory._hasError = true;
+      _currentCategory._error = newsResponse.error;
+      _currentCategory._hasMore = false;
+      _currentCategory._loadingFirst = false;
     }
   }
 
