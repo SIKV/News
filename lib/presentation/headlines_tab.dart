@@ -43,17 +43,21 @@ class _HeadlinesTabState extends State<HeadlinesTab> with StoreWatcherMixin<Head
                     )
                   ];
                 },
-                body: TabBarView(
-                  children: <Widget>[
-                    NewsTab(category: 'all'),
-                    NewsTab(category: 'business'),
-                    NewsTab(category: 'entertainment'),
-                    NewsTab(category: 'general'),
-                    NewsTab(category: 'health'),
-                    NewsTab(category: 'science'),
-                    NewsTab(category: 'sports'),
-                    NewsTab(category: 'technology'),
-                  ],
+                body: MediaQuery.removePadding(
+                  context: context,
+                  removeTop: true,
+                  child: TabBarView(
+                    children: <Widget>[
+                      NewsTab(category: 'all'),
+                      NewsTab(category: 'business'),
+                      NewsTab(category: 'entertainment'),
+                      NewsTab(category: 'general'),
+                      NewsTab(category: 'health'),
+                      NewsTab(category: 'science'),
+                      NewsTab(category: 'sports'),
+                      NewsTab(category: 'technology'),
+                    ],
+                  ),
                 )
             )
         )
