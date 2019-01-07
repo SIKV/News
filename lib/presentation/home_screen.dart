@@ -27,8 +27,8 @@ class _HomeScreenState extends State<HomeScreen> {
             activeIcon: Icon(Icons.search, color: Colors.lightBlue),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.bookmark_border, color: Colors.black26),
-            activeIcon: Icon(Icons.bookmark_border, color: Colors.lightBlue),
+            icon: Icon(Icons.star_border, color: Colors.black26),
+            activeIcon: Icon(Icons.star_border, color: Colors.lightBlue),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings, color: Colors.black26),

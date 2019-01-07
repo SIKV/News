@@ -22,13 +22,13 @@ class ArticleCard extends StatelessWidget {
               onPressed();
             },
             child: Container(
-                child: _articleWidget(article)
+                child: _articleWidget(context, article)
             )
         )
     );
   }
 
-  Widget _articleWidget(Article article) {
+  Widget _articleWidget(BuildContext context, Article article) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -89,7 +89,7 @@ class ArticleCard extends StatelessWidget {
               Text(
                 '${article.source.name} • ${formatDate(article.publishedAt)}',
                 style: TextStyle(
-                  color: Colors.black54,
+                  color: Colors.black,
                   fontSize: 11,
                   fontWeight: FontWeight.normal,
                 ),
@@ -97,12 +97,44 @@ class ArticleCard extends StatelessWidget {
               IconButton(
                 icon: Icon(Icons.more_horiz, color: Colors.black54),
                 onPressed: () {
+                  _showOptionsBottomSheet(context, article);
                 },
               )
             ],
           ),
         ),
       ],
+    );
+  }
+
+  void _showOptionsBottomSheet(BuildContext context, Article article) {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Container(
+            child: Wrap(
+              children: <Widget>[
+                ListTile(
+                  leading: Icon(Icons.star_border),
+                  title: Text('Save for later'),
+                  onTap: () { },
+                ),
+                ListTile(
+                  leading: Icon(Icons.share),
+                  title: Text('Share'),
+                  onTap: () { },
+                ),
+                ListTile(
+                  leading: Icon(Icons.close),
+                  title: Text('Cancel'),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            ),
+          );
+        }
     );
   }
 }
