@@ -62,8 +62,9 @@ class ArticleCard extends StatelessWidget {
           child: Text(
             article.getTitle(),
             style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w600
+                color: Colors.black,
+                fontSize: 19,
+                fontWeight: FontWeight.w500
             ),
           ),
         ),
@@ -74,20 +75,31 @@ class ArticleCard extends StatelessWidget {
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
-              color: Colors.grey,
+              color: Colors.black54,
               fontSize: 14,
-              fontWeight: FontWeight.w300,
+              fontWeight: FontWeight.normal,
             ),
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(left: 16, top: 16, right: 16, bottom: 16),
-          child: Text(
-            '${article.source.name} • ${formatDate(article.publishedAt)}',
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-            ),
+          padding: EdgeInsets.only(left: 16, right: 8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                '${article.source.name} • ${formatDate(article.publishedAt)}',
+                style: TextStyle(
+                  color: Colors.black54,
+                  fontSize: 11,
+                  fontWeight: FontWeight.normal,
+                ),
+              ),
+              IconButton(
+                icon: Icon(Icons.more_horiz, color: Colors.black54),
+                onPressed: () {
+                },
+              )
+            ],
           ),
         ),
       ],
