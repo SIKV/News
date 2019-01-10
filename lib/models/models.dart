@@ -63,6 +63,35 @@ class Article {
       content: json['content']
     );
   }
+
+  SavedArticle toSavedArticle() {
+    return SavedArticle(
+      title: this.title,
+      url: this.url
+    );
+  }
+}
+
+class SavedArticle {
+  final String title;
+  final String url;
+
+  SavedArticle({this.title, this.url});
+
+  factory SavedArticle.fromJson(Map<String, dynamic> json) {
+    return SavedArticle(
+        title: json['title'],
+        url: json['url']
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> json = new Map<String, dynamic>();
+    json['title'] = title;
+    json['url'] = url;
+
+    return json;
+  }
 }
 
 class Source {

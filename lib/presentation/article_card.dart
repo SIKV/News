@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:news/data/saved_repository.dart';
 import 'package:news/models/models.dart';
 import 'package:news/utils.dart';
 import 'package:share/share.dart';
@@ -118,7 +119,10 @@ class ArticleCard extends StatelessWidget {
                 ListTile(
                   leading: Icon(Icons.star_border),
                   title: Text('Save for later'),
-                  onTap: () { },
+                  onTap: () {
+                    _saveForLaterPressed(article);
+                    Navigator.pop(context);
+                  },
                 ),
                 ListTile(
                   leading: Icon(Icons.share),
@@ -144,5 +148,9 @@ class ArticleCard extends StatelessWidget {
 
   void _sharePressed(Article article) {
     Share.share(article.url);
+  }
+
+  void _saveForLaterPressed(Article article) {
+    SavedRepository.internal().insert(article.toSavedArticle());
   }
 }

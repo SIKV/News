@@ -14,3 +14,5 @@ final Action undoClearSearchHistoryAction = Action();
 
 final Action loadCountriesListAction = Action();
 final Action<String> setCurrentCountryAction = Action();
+
+final Action loadSavedArticles = Action();
