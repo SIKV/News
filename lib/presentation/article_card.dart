@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:news/models/models.dart';
 import 'package:news/utils.dart';
+import 'package:share/share.dart';
 
 class ArticleCard extends StatelessWidget {
   final Article article;
@@ -122,7 +123,10 @@ class ArticleCard extends StatelessWidget {
                 ListTile(
                   leading: Icon(Icons.share),
                   title: Text('Share'),
-                  onTap: () { },
+                  onTap: () {
+                    _sharePressed(article);
+                    Navigator.pop(context);
+                  },
                 ),
                 ListTile(
                   leading: Icon(Icons.close),
@@ -136,5 +140,9 @@ class ArticleCard extends StatelessWidget {
           );
         }
     );
+  }
+
+  void _sharePressed(Article article) {
+    Share.share(article.url);
   }
 }
