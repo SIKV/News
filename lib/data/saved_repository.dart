@@ -30,7 +30,16 @@ class SavedRepository {
     return savedArticles;
   }
 
-  void deleteAll() async {
+  void remove(SavedArticle article) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    List<String> savedArticles = prefs.getStringList('saved_articles') ?? [];
+    savedArticles.remove(json.encode(article));
+
+    prefs.setStringList('saved_articles', savedArticles);
+  }
+
+  void removeAll() async {
     final prefs = await SharedPreferences.getInstance();
     prefs.remove('saved_articles');
   }

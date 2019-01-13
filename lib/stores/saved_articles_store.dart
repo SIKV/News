@@ -22,8 +22,13 @@ class SavedArticlesStore extends Store {
     });
 
     triggerOnAction(clearSavedArticlesAction, (_) async {
-      SavedRepository.internal().deleteAll();
+      SavedRepository.internal().removeAll();
       _savedArticles.clear();
+    });
+
+    triggerOnAction(removeSavedArticleAction, (savedArticle) async {
+      SavedRepository.internal().remove(savedArticle);
+      _savedArticles.remove(savedArticle);
     });
   }
 }

@@ -66,7 +66,8 @@ class Article {
 
   SavedArticle toSavedArticle() {
     return SavedArticle(
-      title: this.title,
+      title: this.getTitle(),
+      sourceName: this.source.name,
       url: this.url
     );
   }
@@ -74,13 +75,15 @@ class Article {
 
 class SavedArticle {
   final String title;
+  final String sourceName;
   final String url;
 
-  SavedArticle({this.title, this.url});
+  SavedArticle({this.title, this.sourceName, this.url});
 
   factory SavedArticle.fromJson(Map<String, dynamic> json) {
     return SavedArticle(
         title: json['title'],
+        sourceName: json['sourceName'],
         url: json['url']
     );
   }
@@ -88,6 +91,7 @@ class SavedArticle {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> json = new Map<String, dynamic>();
     json['title'] = title;
+    json['sourceName'] = sourceName;
     json['url'] = url;
 
     return json;
