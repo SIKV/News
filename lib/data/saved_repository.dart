@@ -29,4 +29,9 @@ class SavedRepository {
 
     return savedArticles;
   }
+
+  void deleteAll() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove('saved_articles');
+  }
 }

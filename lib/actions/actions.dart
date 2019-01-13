@@ -1,4 +1,5 @@
 import 'package:flutter_flux/flutter_flux.dart';
+import 'package:news/models/models.dart';
 
 final Action<String> loadNewsAction = Action();
 final Action<String> reloadNewsAction = Action();
@@ -15,4 +16,6 @@ final Action undoClearSearchHistoryAction = Action();
 final Action loadCountriesListAction = Action();
 final Action<String> setCurrentCountryAction = Action();
 
-final Action loadSavedArticles = Action();
+final Action loadSavedArticlesAction = Action();
+final Action<Article> saveArticleAction = Action();
+final Action clearSavedArticlesAction = Action();

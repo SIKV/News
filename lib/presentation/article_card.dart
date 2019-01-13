@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:news/data/saved_repository.dart';
 import 'package:news/models/models.dart';
 import 'package:news/utils.dart';
-import 'package:share/share.dart';
 
 class ArticleCard extends StatelessWidget {
   final Article article;
-  final VoidCallback onPressed;
 
-  ArticleCard({this.article, this.onPressed});
+  final VoidCallback onPressed;
+  final VoidCallback onSavePressed;
+  final VoidCallback onSharePressed;
+
+  ArticleCard({this.article, this.onPressed, this.onSavePressed, this.onSharePressed});
 
   @override
   Widget build(BuildContext context) {
@@ -120,7 +121,7 @@ class ArticleCard extends StatelessWidget {
                   leading: Icon(Icons.star_border),
                   title: Text('Save for later'),
                   onTap: () {
-                    _saveForLaterPressed(article);
+                    onSavePressed();
                     Navigator.pop(context);
                   },
                 ),
@@ -128,7 +129,7 @@ class ArticleCard extends StatelessWidget {
                   leading: Icon(Icons.share),
                   title: Text('Share'),
                   onTap: () {
-                    _sharePressed(article);
+                    onSharePressed();
                     Navigator.pop(context);
                   },
                 ),
@@ -144,13 +145,5 @@ class ArticleCard extends StatelessWidget {
           );
         }
     );
-  }
-
-  void _sharePressed(Article article) {
-    Share.share(article.url);
-  }
-
-  void _saveForLaterPressed(Article article) {
-    SavedRepository.internal().insert(article.toSavedArticle());
   }
 }

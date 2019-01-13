@@ -5,6 +5,7 @@ import 'package:news/actions/actions.dart';
 import 'package:news/models/models.dart';
 import 'package:news/presentation/article_card.dart';
 import 'package:news/stores/news_store.dart';
+import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class NewsTab extends StatefulWidget {
@@ -80,6 +81,12 @@ class _NewsTabState extends State<NewsTab> with StoreWatcherMixin<NewsTab> {
                 article: article,
                 onPressed: () {
                   _openArticle(article);
+                },
+                onSavePressed: () {
+                  saveArticleAction.call(article);
+                },
+                onSharePressed: () {
+                  Share.share(article.url);
                 },
               );
             }

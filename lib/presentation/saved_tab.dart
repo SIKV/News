@@ -18,7 +18,7 @@ class _SavedTabState extends State<SavedTab> with StoreWatcherMixin<SavedTab> {
   void initState() {
     savedArticlesStore = listenToStore(savedArticlesStoreToken);
 
-    loadSavedArticles.call();
+    loadSavedArticlesAction.call();
 
     super.initState();
   }
@@ -30,6 +30,14 @@ class _SavedTabState extends State<SavedTab> with StoreWatcherMixin<SavedTab> {
           title: Text('Saved'),
           centerTitle: true,
           elevation: 0.5,
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.delete_outline),
+              onPressed: () {
+                clearSavedArticlesAction.call();
+              },
+            )
+          ],
         ),
         body: _savedArticlesList()
     );
