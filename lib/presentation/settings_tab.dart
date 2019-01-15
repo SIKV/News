@@ -89,7 +89,13 @@ class _SettingsTabState extends State<SettingsTab> with StoreWatcherMixin<Settin
                         clearSearchHistoryAction.call().then((_) {
                           Scaffold.of(context).showSnackBar(
                               SnackBar(
-                                content: Text('Search History cleared'),
+                                backgroundColor: Colors.white,
+                                content: Text(
+                                  'Cleared',
+                                  style: TextStyle(
+                                    color: Colors.black
+                                  ),
+                                ),
                                 action: SnackBarAction(
                                   label: 'UNDO',
                                   onPressed: () {
