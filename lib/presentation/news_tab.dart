@@ -5,6 +5,7 @@ import 'package:news/actions/actions.dart';
 import 'package:news/models/models.dart';
 import 'package:news/presentation/article_card.dart';
 import 'package:news/stores/news_store.dart';
+import 'package:news/stores/saved_articles_store.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -19,16 +20,18 @@ class NewsTab extends StatefulWidget {
 
 class _NewsTabState extends State<NewsTab> with StoreWatcherMixin<NewsTab> {
   NewsStore newsStore;
+  SavedArticlesStore savedArticlesStore;
 
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey();
 
   @override
   void initState() {
-    newsStore = listenToStore(newsStoreToken);
-
-    loadNewsAction.call(widget.category);
-
     super.initState();
+    
+    newsStore = listenToStore(newsStoreToken);
+    savedArticlesStore = listenToStore(savedArticlesStoreToken);
+    
+    loadNewsAction.call(widget.category);
   }
 
   void _openArticle(Article article) async {
@@ -46,7 +49,7 @@ class _NewsTabState extends State<NewsTab> with StoreWatcherMixin<NewsTab> {
   @override
   Widget build(BuildContext context) {
     return Center(
-        child: newsStore.getCategory(widget.category).loadingFirst ? CircularProgressIndicator() : _articlesWidget()
+      child: newsStore.getCategory(widget.category).loadingFirst ? CircularProgressIndicator() : _articlesWidget(),
     );
   }
 
