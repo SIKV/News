@@ -7,7 +7,7 @@ class MessageNotifier {
   MessageNotifier.internal();
   factory MessageNotifier() => _instance;
 
-  final StreamController<String> _streamController = StreamController();
+  final StreamController<String> _streamController = StreamController.broadcast();
 
   void post(String value) {
     _streamController.add(value);

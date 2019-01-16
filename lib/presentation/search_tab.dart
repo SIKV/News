@@ -2,10 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_flux/flutter_flux.dart';
 import 'package:news/actions/actions.dart';
+import 'package:news/message_notifier.dart';
 import 'package:news/models/models.dart';
 import 'package:news/presentation/article_card.dart';
 import 'package:news/stores/news_store.dart';
+import 'package:news/stores/saved_articles_store.dart';
 import 'package:news/stores/search_history_store.dart';
+import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SearchTab extends StatefulWidget {
@@ -18,11 +21,50 @@ class SearchTab extends StatefulWidget {
 class _SearchTabState extends State<SearchTab> with StoreWatcherMixin<SearchTab> {
   NewsStore newsStore;
   SearchHistoryStore searchHistoryStore;
+  SavedArticlesStore savedArticlesStore;
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   final _searchTextFieldController = TextEditingController();
 
   bool _showClearIcon = false;
   bool _showSearchHistory = true;
+
+  @override
+  void initState() {
+    super.initState();
+
+    newsStore = listenToStore(newsStoreToken);
+    searchHistoryStore = listenToStore(searchHistoryStoreToken);
+    savedArticlesStore = listenToStore(savedArticlesStoreToken);
+
+    loadSearchHistoryAction.call();
+
+    messageNotifier.listen((message) {
+      showSnackBar(message);
+    });
+  }
+
+  @override
+  void dispose() {
+    _searchTextFieldController.dispose();
+
+    super.dispose();
+  }
+
+  void showSnackBar(String text) {
+    _scaffoldKey.currentState.showSnackBar(
+      SnackBar(
+        backgroundColor: Colors.white,
+        content: Text(
+          text,
+          style: TextStyle(
+              color: Colors.black
+          ),
+        ),
+      ),
+    );
+  }
 
   void _onSearchTextChanged(String text) {
     setState(() {
@@ -64,25 +106,9 @@ class _SearchTabState extends State<SearchTab> with StoreWatcherMixin<SearchTab>
   }
 
   @override
-  void initState() {
-    super.initState();
-
-    newsStore = listenToStore(newsStoreToken);
-    searchHistoryStore = listenToStore(searchHistoryStoreToken);
-
-    loadSearchHistoryAction.call();
-  }
-
-  @override
-  void dispose() {
-    _searchTextFieldController.dispose();
-
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
           elevation: 0.5,
           leading: Icon(
@@ -148,6 +174,12 @@ class _SearchTabState extends State<SearchTab> with StoreWatcherMixin<SearchTab>
                 article: article,
                 onPressed: () {
                   _openArticle(article);
+                },
+                onSavePressed: () {
+                  saveArticleAction.call(article);
+                },
+                onSharePressed: () {
+                  Share.share(article.url);
                 },
               );
             }

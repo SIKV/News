@@ -23,13 +23,6 @@ class _HeadlinesTabState extends State<HeadlinesTab> with StoreWatcherMixin<Head
     });
   }
 
-  @override
-  void dispose() {
-    messageNotifier.dispose();
-
-    super.dispose();
-  }
-
   void showSnackBar(String text) {
     _scaffoldKey.currentState.showSnackBar(
       SnackBar(
