@@ -18,10 +18,14 @@ class SavedArticlesStore extends Store {
     triggerOnAction(saveArticleAction, (article) async {
       SavedArticle savedArticle = article.toSavedArticle();
 
-      SavedRepository.internal().insert(savedArticle);
-      _savedArticles.add(savedArticle);
+      if (_savedArticles.contains(savedArticle)) {
+        messageNotifier.post('Already saved');
+      } else {
+        SavedRepository.internal().insert(savedArticle);
+        _savedArticles.add(savedArticle);
 
-      messageNotifier.post('Saved');
+        messageNotifier.post('Saved');
+      }
     });
 
     triggerOnAction(clearSavedArticlesAction, (_) async {

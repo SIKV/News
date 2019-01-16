@@ -80,6 +80,9 @@ class SavedArticle {
 
   SavedArticle({this.title, this.sourceName, this.url});
 
+  bool operator ==(obj) => obj is SavedArticle && title == obj.title && url == obj.url;
+  int get hashCode => url.hashCode;
+
   factory SavedArticle.fromJson(Map<String, dynamic> json) {
     return SavedArticle(
         title: json['title'],
