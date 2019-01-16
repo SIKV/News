@@ -49,8 +49,14 @@ class _SavedTabState extends State<SavedTab> with StoreWatcherMixin<SavedTab> {
             )
           ],
         ),
-        body: _savedArticlesList()
+        body: Center(
+          child: savedArticlesStore.savedArticles.isEmpty ? _emptyWidget() : _savedArticlesList(),
+        )
     );
+  }
+
+  Widget _emptyWidget() {
+    return Text('Empty');
   }
 
   Widget _savedArticlesList() {
