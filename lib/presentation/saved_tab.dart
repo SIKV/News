@@ -86,14 +86,34 @@ class _SavedTabState extends State<SavedTab> with StoreWatcherMixin<SavedTab> {
                     ),
                   ),
                 ),
-                trailing: IconButton(
-                  icon: Icon(
-                    Icons.clear,
-                    size: 18,
+                trailing: Builder(
+                  builder: (context) => IconButton(
+                    icon: Icon(
+                      Icons.clear,
+                      size: 18,
+                    ),
+                    onPressed: () {
+                      removeSavedArticleAction.call(article).then((_) {
+                        Scaffold.of(context).showSnackBar(
+                          SnackBar(
+                            backgroundColor: Colors.white,
+                            content: Text(
+                              'Removed',
+                              style: TextStyle(
+                                color: Colors.black,
+                              ),
+                            ),
+                            action: SnackBarAction(
+                              label: 'UNDO',
+                              onPressed: () {
+                                undoRemoveSavedArticleAction.call();
+                              },
+                            ),
+                          ),
+                        );
+                      });
+                    },
                   ),
-                  onPressed: () {
-                    removeSavedArticleAction.call(article);
-                  },
                 ),
                 onTap: () {
                   _openArticle(article);

@@ -20,3 +20,4 @@ final Action loadSavedArticlesAction = Action();
 final Action<Article> saveArticleAction = Action();
 final Action clearSavedArticlesAction = Action();
 final Action<SavedArticle> removeSavedArticleAction = Action();
+final Action undoRemoveSavedArticleAction = Action();

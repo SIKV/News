@@ -10,6 +10,9 @@ class SavedArticlesStore extends Store {
   List<SavedArticle> _savedArticles = [];
   List<SavedArticle> get savedArticles => List<SavedArticle>.unmodifiable(_savedArticles);
 
+  SavedArticle _removedArticle;
+  int _removedArticlePosition;
+
   SavedArticlesStore() {
     triggerOnAction(loadSavedArticlesAction, (_) async {
       _savedArticles = await SavedRepository.internal().getAll();
@@ -34,8 +37,16 @@ class SavedArticlesStore extends Store {
     });
 
     triggerOnAction(removeSavedArticleAction, (savedArticle) async {
+      _removedArticle = savedArticle;
+      _removedArticlePosition = _savedArticles.indexOf(savedArticle);
+
       SavedRepository.internal().remove(savedArticle);
       _savedArticles.remove(savedArticle);
+    });
+
+    triggerOnAction(undoRemoveSavedArticleAction, (savedArticle) async {
+      SavedRepository.internal().insert(_removedArticle, position: _removedArticlePosition);
+      _savedArticles.insert(_removedArticlePosition, _removedArticle);
     });
   }
 }

@@ -8,11 +8,16 @@ class SavedRepository {
   SavedRepository.internal();
   factory SavedRepository() => _instance;
 
-  void insert(SavedArticle article) async {
+  void insert(SavedArticle article, {int position: -1}) async {
     final prefs = await SharedPreferences.getInstance();
 
     List<String> savedArticles = prefs.getStringList('saved_articles') ?? [];
-    savedArticles.add(json.encode(article));
+
+    if (position != -1) {
+      savedArticles.insert(position, json.encode(article));
+    } else {
+      savedArticles.add(json.encode(article));
+    }
 
     prefs.setStringList('saved_articles', savedArticles);
   }
