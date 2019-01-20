@@ -93,7 +93,7 @@ class ArticleCard extends StatelessWidget {
                 '${article.source.name} • ${formatDate(article.publishedAt)}',
                 style: TextStyle(
                   color: Colors.black,
-                  fontSize: 11,
+                  fontSize: 12,
                   fontWeight: FontWeight.normal,
                 ),
               ),
