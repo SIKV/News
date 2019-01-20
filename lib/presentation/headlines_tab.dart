@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_flux/flutter_flux.dart';
-import 'package:news/message_notifier.dart';
 import 'package:news/presentation/news_tab.dart';
 
 class HeadlinesTab extends StatefulWidget {
@@ -15,29 +14,6 @@ class _HeadlinesTabState extends State<HeadlinesTab> with StoreWatcherMixin<Head
   final ScrollController scrollController = ScrollController();
 
   @override
-  void initState() {
-    super.initState();
-
-    messageNotifier.listen((message) {
-      showSnackBar(message);
-    });
-  }
-
-  void showSnackBar(String text) {
-    _scaffoldKey.currentState.showSnackBar(
-      SnackBar(
-        backgroundColor: Colors.white,
-        content: Text(
-          text,
-          style: TextStyle(
-              color: Colors.black
-          ),
-        ),
-      ),
-    );
-  }
-
-  @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 8,
@@ -48,25 +24,25 @@ class _HeadlinesTabState extends State<HeadlinesTab> with StoreWatcherMixin<Head
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
             return <Widget>[
               SliverAppBar(
-                  title: Text('Headlines'),
-                  pinned: true,
-                  floating: true,
-                  forceElevated: true,
-                  elevation: 1.0,
-                  centerTitle: true,
-                  bottom: TabBar(
-                      isScrollable: true,
-                      tabs: [
-                        Tab(text: 'All'),
-                        Tab(text: 'Business'),
-                        Tab(text: 'Entertainment'),
-                        Tab(text: 'General'),
-                        Tab(text: 'Health'),
-                        Tab(text: 'Science'),
-                        Tab(text: 'Sports'),
-                        Tab(text: 'Technology'),
-                      ]
-                  )
+                title: Text('Headlines'),
+                pinned: true,
+                floating: true,
+                forceElevated: true,
+                elevation: 1.0,
+                centerTitle: true,
+                bottom: TabBar(
+                  isScrollable: true,
+                  tabs: [
+                    Tab(text: 'All'),
+                    Tab(text: 'Business'),
+                    Tab(text: 'Entertainment'),
+                    Tab(text: 'General'),
+                    Tab(text: 'Health'),
+                    Tab(text: 'Science'),
+                    Tab(text: 'Sports'),
+                    Tab(text: 'Technology'),
+                  ],
+                ),
               )
             ];
           },

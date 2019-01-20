@@ -46,6 +46,20 @@ class _NewsTabState extends State<NewsTab> with StoreWatcherMixin<NewsTab> {
     return reloadNewsAction.call(widget.category).then((_) {});
   }
 
+  void _showSnackBar(String text) {
+    Scaffold.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: Colors.white,
+        content: Text(
+          text,
+          style: TextStyle(
+            color: Colors.black,
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -86,7 +100,9 @@ class _NewsTabState extends State<NewsTab> with StoreWatcherMixin<NewsTab> {
                   _openArticle(article);
                 },
                 onSavePressed: () {
-                  saveArticleAction.call(article);
+                  saveArticleAction.call(article).then((_) {
+                    _showSnackBar(savedArticlesStore.saveActionStatus);
+                  });
                 },
                 onSharePressed: () {
                   Share.share(article.url);

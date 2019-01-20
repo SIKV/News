@@ -1,7 +1,6 @@
 import 'package:flutter_flux/flutter_flux.dart';
 import 'package:news/actions/actions.dart';
 import 'package:news/data/saved_repository.dart';
-import 'package:news/message_notifier.dart';
 import 'package:news/models/models.dart';
 
 final StoreToken savedArticlesStoreToken = StoreToken(SavedArticlesStore());
@@ -13,6 +12,9 @@ class SavedArticlesStore extends Store {
   SavedArticle _removedArticle;
   int _removedArticlePosition;
 
+  String _saveActionStatus;
+  String get saveActionStatus => _saveActionStatus;
+
   SavedArticlesStore() {
     triggerOnAction(loadSavedArticlesAction, (_) async {
       _savedArticles = await SavedRepository.internal().getAll();
@@ -22,12 +24,12 @@ class SavedArticlesStore extends Store {
       SavedArticle savedArticle = article.toSavedArticle();
 
       if (_savedArticles.contains(savedArticle)) {
-        messageNotifier.post('Already saved');
+        _saveActionStatus = 'Already saved';
       } else {
         SavedRepository.internal().insert(savedArticle);
-        _savedArticles.add(savedArticle);
 
-        messageNotifier.post('Saved');
+        _savedArticles.add(savedArticle);
+        _saveActionStatus = 'Saved';
       }
     });
 

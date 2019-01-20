@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_flux/flutter_flux.dart';
 import 'package:news/actions/actions.dart';
-import 'package:news/message_notifier.dart';
 import 'package:news/models/models.dart';
 import 'package:news/presentation/article_card.dart';
 import 'package:news/stores/news_store.dart';
@@ -39,10 +38,6 @@ class _SearchTabState extends State<SearchTab> with StoreWatcherMixin<SearchTab>
     savedArticlesStore = listenToStore(savedArticlesStoreToken);
 
     loadSearchHistoryAction.call();
-
-    messageNotifier.listen((message) {
-      showSnackBar(message);
-    });
   }
 
   @override
@@ -52,7 +47,7 @@ class _SearchTabState extends State<SearchTab> with StoreWatcherMixin<SearchTab>
     super.dispose();
   }
 
-  void showSnackBar(String text) {
+  void _showSnackBar(String text) {
     _scaffoldKey.currentState.showSnackBar(
       SnackBar(
         backgroundColor: Colors.white,
@@ -176,7 +171,9 @@ class _SearchTabState extends State<SearchTab> with StoreWatcherMixin<SearchTab>
                   _openArticle(article);
                 },
                 onSavePressed: () {
-                  saveArticleAction.call(article);
+                  saveArticleAction.call(article).then((_) {
+                    _showSnackBar(savedArticlesStore.saveActionStatus);
+                  });
                 },
                 onSharePressed: () {
                   Share.share(article.url);
