@@ -68,12 +68,20 @@ class _SearchTabState extends State<SearchTab> with StoreWatcherMixin<SearchTab>
   }
 
   void _onSearchSubmitted(String text) {
-    searchNewsAction.call(text);
-    addSearchValueAction.call(text);
+    text = text.trim();
 
-    setState(() {
-      _showSearchHistory = false;
-    });
+    if (text.isEmpty) {
+      setState(() {
+        _showSearchHistory = true;
+      });
+    } else {
+      searchNewsAction.call(text);
+      addSearchValueAction.call(text);
+
+      setState(() {
+        _showSearchHistory = false;
+      });
+    }
   }
 
   void _onClearButtonPressed() {
