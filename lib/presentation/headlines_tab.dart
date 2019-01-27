@@ -51,7 +51,7 @@ class _HeadlinesTabState extends State<HeadlinesTab> with StoreWatcherMixin<Head
             removeTop: true,
             child: TabBarView(
               children: <Widget>[
-                NewsTab(category: 'all'),
+                NewsTab(category: ''),
                 NewsTab(category: 'business'),
                 NewsTab(category: 'entertainment'),
                 NewsTab(category: 'general'),
